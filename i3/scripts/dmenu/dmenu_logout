@@ -1,0 +1,10 @@
+#!/usr/bin/env python
+# -*- mode: python -*-
+
+# author: syl20bnr (2013)
+# goal: Logout from the session
+
+from i3_actions import logout
+
+if __name__ == '__main__':
+    logout()

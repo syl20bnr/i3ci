@@ -1,0 +1,8 @@
+*.pyc
+*.o
+*.tmp
+dmenu/core
+dmenu/dmenu
+dmenu/stest
+
+

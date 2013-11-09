@@ -1,0 +1,6 @@
+#!/bin/sh
+# Invoke dmenu with solarized colors and additional config
+# A prompt can be passed as a parameter
+
+~/.i3/bin/dmenu -i -b -h 20 -p "$1" $2 \
+      -nb "#002b36" -nf "#657b83" -sb "#859900" -sf "#eee8d5"
