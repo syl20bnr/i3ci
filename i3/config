@@ -692,7 +692,6 @@ mode "$send_app_to_app_mode" {
 
 mode "$send_app_new_mode" {
     # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
-    bindsym  Return             mode $default
     bindsym  Escape             mode $default
     bindcode $quitmode          mode $default
     bindcode $quitmode2         mode $default
