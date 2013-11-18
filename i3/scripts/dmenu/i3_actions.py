@@ -264,7 +264,7 @@ def jump_to_currently_used_workspace(feeder, output='all'):
 def send_workspace_to_output(feeder, output='all'):
     ''' Send the current workspace to the selected output. '''
     if output == 'all':
-        from feeders import cur_workspace
+        # be sure that the workspace exists
         cur_wks = cur_workspace.get_current_workspace()
         if not cur_wks:
             return
@@ -372,8 +372,13 @@ def send_window_to_used_workspace(feeder, output):
         default_mode()
 
 
-def send_window_to_win_workspace(feeder, output='all'):
-    ''' Send the current window to the workspace of the selected window. '''
+def _choose_other_windows(feeder, output):
+    '''
+    Launch a dmenu instance to select a window which is not on the current
+    worspace.
+    Return a tuple composed of the window name and the window id.
+    Return None if nothing has been selected.
+    '''
     (wins, d) = feeder.feed(output=output)
     size = get_max_row(len(wins))
     proc = dmenu.call(f=DMENU_FONT,
@@ -386,11 +391,41 @@ def send_window_to_win_workspace(feeder, output='all'):
         wins = [k for k, v in d.iteritems() if v not in excluded_wins]
     reply = proc.communicate('\n'.join(wins).encode('utf-8'))[0]
     if reply:
-        ws = _get_window_workspace(d.get(reply))
-        reply = reply.decode('utf-8')
+        return reply, d.get(reply)
+    else:
+        return None, None
+
+
+def send_window_to_win_workspace(feeder, output='all'):
+    ''' Send the current window to the workspace of the selected window. '''
+    win, win_id = _choose_other_windows(feeder, output)
+    if win:
+        ws = _get_window_workspace(win_id)
         action = Action()
         action.add_action(Action.send_window_to_workspace, (ws,))
         action.add_action(Action.jump_to_workspace, (ws,))
+        default_mode(action)
+        action.process()
+    else:
+        default_mode()
+
+
+def bring_window(feeder, output='all'):
+    ''' Bring the chosen window to the current workspace. '''
+    win, win_id = _choose_other_windows(feeder, output)
+    if win:
+        # TODO
+        ws = cur_workspace.feed()
+        other_ws = _get_window_workspace(win_id)
+        action = Action()
+        # switch focus to the window to bring
+        action.add_action(Action.jump_to_workspace, (other_ws,))
+        action.focus_window(win_id)
+        # send the window to the original workspace
+        action.add_action(Action.send_window_to_workspace, (ws,))
+        action.add_action(Action.jump_to_workspace, (ws,))
+        # make sure the new window is focused at the end
+        action.focus_window(win_id)
         default_mode(action)
         action.process()
     else:

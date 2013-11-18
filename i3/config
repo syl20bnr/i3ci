@@ -180,8 +180,8 @@ bindsym $mod+n mode $new_mode
 
 set $new_app_mode               new application
 set $new_app_new_mode           new application in a new workspace
-set $new_app_vertical_mode      new application vertical split
-set $new_app_horizontal_mode    new application horizontal split
+set $new_app_v_mode             new application vertical split
+set $new_app_h_mode             new application horizontal split
 set $new_app_mon1_mode          new application on monitor 1
 set $new_app_mon1_new_mode      new application on monitor 1 in a new workspace
 set $new_app_mon2_mode          new application on monitor 2
@@ -196,8 +196,8 @@ mode "$new_app_mode" {
     bindsym         1           mode $new_app_mon1_mode
     bindsym         2           mode $new_app_mon2_mode
     bindsym         n           mode $new_app_new_mode
-    bindsym         h           mode $new_app_horizontal_mode
-    bindsym         v           mode $new_app_vertical_mode
+    bindsym         h           mode $new_app_h_mode
+    bindsym         v           mode $new_app_v_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
     bindsym         Return      exec $dmenup/dmenu_run
 }
@@ -212,17 +212,7 @@ mode "$new_app_new_mode" {
     bindsym         Return      exec $dmenup/dmenu_run --free
 }
 
-mode "$new_app_vertical_mode" {
-    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
-    bindsym  Escape             mode $default
-    bindcode $quitmode          mode $default
-    bindcode $quitmode2         mode $default
-    bindcode $upmode            mode $new_app_mode
-    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      splith, exec $dmenup/dmenu_run
-}
-
-mode "$new_app_horizontal_mode" {
+mode "$new_app_v_mode" {
     # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
     bindsym  Escape             mode $default
     bindcode $quitmode          mode $default
@@ -230,6 +220,16 @@ mode "$new_app_horizontal_mode" {
     bindcode $upmode            mode $new_app_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
     bindsym         Return      splitv, exec $dmenup/dmenu_run
+}
+
+mode "$new_app_h_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $new_app_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      splith, exec $dmenup/dmenu_run
 }
 
 mode "$new_app_mon1_mode" {
@@ -278,8 +278,8 @@ mode "$new_app_mon2_new_mode" {
 
 set $new_term_mode               new terminal
 set $new_term_new_mode           new terminal in a new workspace
-set $new_term_vertical_mode      new terminal vertical split
-set $new_term_horizontal_mode    new terminal horizontal split
+set $new_term_v_mode             new terminal vertical split
+set $new_term_h_mode             new terminal horizontal split
 set $new_term_mon1_mode          new terminal on monitor 1
 set $new_term_mon1_new_mode      new terminal on monitor 1 in a new workspace
 set $new_term_mon2_mode          new terminal on monitor 2
@@ -294,8 +294,8 @@ mode "$new_term_mode" {
     bindsym         1           mode $new_term_mon1_mode
     bindsym         2           mode $new_term_mon2_mode
     bindsym         n           mode $new_term_new_mode
-    bindsym         v           mode $new_term_vertical_mode
-    bindsym         h           mode $new_term_horizontal_mode
+    bindsym         v           mode $new_term_v_mode
+    bindsym         h           mode $new_term_h_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
     bindsym         Return      exec $dmenup/run -a $term
 }
@@ -310,7 +310,7 @@ mode "$new_term_new_mode" {
     bindsym         Return      exec $dmenup/run -a $term --free
 }
 
-mode "$new_term_horizontal_mode" {
+mode "$new_term_h_mode" {
     # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
     bindsym  Escape             mode $default
     bindcode $quitmode          mode $default
@@ -320,7 +320,7 @@ mode "$new_term_horizontal_mode" {
     bindsym         Return      splith, exec $dmenup/run -a $term
 }
 
-mode "$new_term_vertical_mode" {
+mode "$new_term_v_mode" {
     # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
     bindsym  Escape             mode $default
     bindcode $quitmode          mode $default
@@ -376,8 +376,8 @@ mode "$new_term_mon2_new_mode" {
 
 set $clone_mode                 clone
 set $clone_new_mode             clone in a new workspace
-set $clone_vertical_mode        clone vertical split
-set $clone_horizontal_mode      clone horizontal split
+set $clone_v_mode               clone vertical split
+set $clone_h_mode               clone horizontal split
 set $clone_mon1_mode            clone on monitor 1
 set $clone_mon1_new_mode        clone on monitor 1 in a new workspace
 set $clone_mon2_mode            clone on monitor 2
@@ -391,9 +391,9 @@ mode "$clone_mode" {
     bindcode $upmode            mode $default
     bindsym         1           mode $clone_mon1_mode
     bindsym         2           mode $clone_mon2_mode
-    bindsym         h           mode $clone_horizontal_mode
+    bindsym         h           mode $clone_h_mode
     bindsym         n           mode $clone_new_mode
-    bindsym         v           mode $clone_vertical_mode
+    bindsym         v           mode $clone_v_mode
     # - - - - - - - - - - - - - -  key map - - - - - - - - - - - - - - - -
     bindsym         Return      exec $dmenup/clone_win
 }
@@ -409,7 +409,7 @@ mode "$clone_new_mode" {
     bindsym         Return      exec $dmenup/clone_win --free
 }
 
-mode "$clone_horizontal_mode" {
+mode "$clone_h_mode" {
     # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
     bindsym  Escape             mode $default
     bindcode $quitmode          mode $default
@@ -419,7 +419,7 @@ mode "$clone_horizontal_mode" {
     bindsym         Return      splith, exec $dmenup/clone_win
 }
 
-mode "$clone_vertical_mode" {
+mode "$clone_v_mode" {
     # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
     bindsym  Escape             mode $default
     bindcode $quitmode          mode $default
@@ -650,7 +650,7 @@ set $send_container_mode         send container
 set $send_container_mon1_mode    send container to monitor 1
 set $send_container_mon2_mode    send container to monitor 2
 
-set $mode_wks_mode               send workspace
+# set $mode_wks_mode               send workspace
 
 mode "$send_mode" {
     # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
@@ -827,6 +827,139 @@ mode "$send_container_mon2_mode" {
     bindsym         Return      move to output $mon2output, focus output $mon2output, mode $default
 }
 
+# Mode: bring  -------------------------------------------------------------
+
+set $bring_mode                  bring
+
+set $bring_app_mode              bring application
+set $bring_app_v_mode            bring application vertical split
+set $bring_app_h_mode            bring application horizontal split
+set $bring_app_mon1_mode         bring application from monitor 1
+set $bring_app_mon1_v_mode       bring application from monitor 1 vertical split
+set $bring_app_mon1_h_mode       bring application from monitor 1 horizontal split
+set $bring_app_mon2_mode         bring application from monitor 2
+set $bring_app_mon2_v_mode       bring application from monitor 2 vertical split
+set $bring_app_mon2_h_mode       bring application from monitor 2 horizontal split
+
+# set $bring_workspace_mode        bring workspace
+
+mode "$bring_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Return             mode $default
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $default
+    bindsym         a           mode $bring_app_mode
+}
+bindsym $mod+b mode $bring_mode
+
+mode "$bring_app_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $bring_mode
+    bindsym         1           mode $bring_app_mon1_mode
+    bindsym         2           mode $bring_app_mon2_mode
+    bindsym         h           mode $bring_app_h_mode
+    bindsym         v           mode $bring_app_v_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $dmenup/dmenu_bring_win
+}
+
+mode "$bring_app_h_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $bring_app_mode
+    bindsym         v           mode $bring_app_v_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      splith, exec $dmenup/dmenu_bring_win
+}
+
+mode "$bring_app_v_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $bring_app_mode
+    bindsym         h           mode $bring_app_h_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      splitv, exec $dmenup/dmenu_bring_win
+}
+
+mode "$bring_app_mon1_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $bring_app_mode
+    bindsym         2           mode $bring_app_mon2_mode
+    bindsym         h           mode $bring_app_mon1_h_mode
+    bindsym         v           mode $bring_app_mon1_v_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $dmenup/dmenu_bring_win $mon1arg
+}
+
+mode "$bring_app_mon1_h_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $bring_app_mon1_mode
+    bindsym         v           mode $bring_app_mon1_v_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      splith, exec $dmenup/dmenu_bring_win $mon1arg
+}
+
+mode "$bring_app_mon1_v_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $bring_app_mon1_mode
+    bindsym         h           mode $bring_app_mon1_h_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      splitv, exec $dmenup/dmenu_bring_win $mon1arg
+}
+
+mode "$bring_app_mon2_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $bring_app_mode
+    bindsym         1           mode $bring_app_mon1_mode
+    bindsym         h           mode $bring_app_mon2_h_mode
+    bindsym         v           mode $bring_app_mon2_v_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      exec $dmenup/dmenu_bring_win $mon1arg
+}
+
+mode "$bring_app_mon2_h_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $bring_app_mon2_mode
+    bindsym         v           mode $bring_app_mon2_v_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      splith, exec $dmenup/dmenu_bring_win $mon2arg
+}
+
+mode "$bring_app_mon2_v_mode" {
+    # - - - - - - - - - - - - - - Sub Modes  - - - - - - - - - - - - - - -
+    bindsym  Escape             mode $default
+    bindcode $quitmode          mode $default
+    bindcode $quitmode2         mode $default
+    bindcode $upmode            mode $bring_app_mon2_mode
+    bindsym         h           mode $bring_app_mon2_h_mode
+    # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
+    bindsym         Return      splitv, exec $dmenup/dmenu_bring_win $mon2arg
+}
+
 # Mode: functions --------------------------------------------------------
 
 set $func_mode              functions
@@ -950,7 +1083,6 @@ exec --no-startup-id unclutter
 exec --no-startup-id dunst
 exec --no-startup-id gnome-settings-daemon
 exec --no-startup-id $wallpaper
-#exec radiotray
 
 # home
 exec --no-startup-id u1sdtool --start
@@ -959,5 +1091,3 @@ exec --no-startup-id /usr/lib/indicator-ubuntuone/indicator-ubuntuone
 # work
 #exec --no-startup-id synergy
 #exec --no-startup-id /home/sbenner/.mouse_sens.sh
-#hello
-#hello
