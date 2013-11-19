@@ -255,7 +255,6 @@ def jump_to_currently_used_workspace(feeder, output='all'):
         action = Action()
         action.add_action(Action.jump_to_workspace, (reply,))
         default_mode(action)
-        print action.get_command()
         action.process()
     else:
         default_mode()
@@ -391,6 +390,7 @@ def _choose_other_windows(feeder, output):
         wins = [k for k, v in d.iteritems() if v not in excluded_wins]
     reply = proc.communicate('\n'.join(wins).encode('utf-8'))[0]
     if reply:
+        reply = reply.decode('utf-8')
         return reply, d.get(reply)
     else:
         return None, None
@@ -426,6 +426,7 @@ def bring_window(feeder, output='all'):
         action.add_action(Action.jump_to_workspace, (ws,))
         # make sure the new window is focused at the end
         action.focus_window(win_id)
+        # print action.get_command()
         default_mode(action)
         action.process()
     else:
