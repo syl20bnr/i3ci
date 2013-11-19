@@ -935,7 +935,7 @@ mode "$bring_app_mon2_mode" {
     bindsym         h           mode $bring_app_mon2_h_mode
     bindsym         v           mode $bring_app_mon2_v_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $dmenup/dmenu_bring_win $mon1arg
+    bindsym         Return      exec $dmenup/dmenu_bring_win $mon2arg
 }
 
 mode "$bring_app_mon2_h_mode" {
