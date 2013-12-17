@@ -1,8 +1,8 @@
 *.pyc
 *.o
 *.tmp
-dmenu/core
-dmenu/dmenu
-dmenu/stest
+i3ci-menu/core
+i3ci-menu/i3ci-menu
+i3ci-menu/stest
 
 

@@ -7,8 +7,8 @@ INSTALL=~/.i3
 BACKUP=$(INSTALL).bak
 
 all:
-	@echo Compiling dmenu...
-	cd dmenu; make
+	@echo Compiling i3ci-menu...
+	cd i3ci-menu; make
 
 install: all
 	@echo Making a backup of current i3 config in $(BACKUP)...
@@ -17,7 +17,7 @@ install: all
 	@echo Installing i3 configuration...
 	cp -r i3/ $(INSTALL)
 	mkdir -p $(INSTALL)/bin
-	cp dmenu/dmenu $(INSTALL)/bin
+	cp i3ci-menu/i3ci-menu $(INSTALL)/bin
 
 update: install
 	@echo Restarting i3 config...
@@ -32,4 +32,4 @@ revert:
 
 clean:
 	@echo Cleaning...
-	cd dmenu; make clean
+	cd i3ci-menu; make clean
