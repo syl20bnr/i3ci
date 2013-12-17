@@ -5,7 +5,7 @@ import os
 from subprocess import Popen, PIPE
 
 MODULE_PATH = os.path.dirname(os.path.abspath(__file__))
-MENU = os.path.normpath(os.path.join(MODULE_PATH, '../../bin/i3ci-menu'))
+MENU = os.path.normpath(os.path.join(MODULE_PATH, '../../bin/i3ci_menu'))
 
 
 def call(p=None,

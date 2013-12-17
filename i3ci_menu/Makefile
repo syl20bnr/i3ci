@@ -1,16 +1,16 @@
-# i3ci-menu (a fork of dmenu for i3 config improved)
+# i3ci_menu (a fork of dmenu for i3 config improved)
 # See LICENSE file for copyright and license details.
 
 include config.mk
 
-SRC = i3ci-menu.c draw.c stest.c hash.c
+SRC = i3ci_menu.c draw.c stest.c hash.c
 OBJ = ${SRC:.c=.o}
-PROG = i3ci-menu
+PROG = i3ci_menu
 
-all: i3ci-menu dmenu_path stest
+all: i3ci_menu dmenu_path stest
 
 options:
-	@echo i3ci-menu build options:
+	@echo i3ci_menu build options:
 	@echo "CFLAGS   = ${CFLAGS}"
 	@echo "LDFLAGS  = ${LDFLAGS}"
 	@echo "CC       = ${CC}"
@@ -21,9 +21,9 @@ options:
 
 ${OBJ}: config.mk draw.h hash.h
 
-i3ci-menu: i3ci-menu.o draw.o hash.o
+i3ci_menu: i3ci_menu.o draw.o hash.o
 	@echo CC -o $@
-	@${CC} -o ${PROG} i3ci-menu.o draw.o hash.o ${LDFLAGS} `freetype-config --cflags --libs`
+	@${CC} -o ${PROG} i3ci_menu.o draw.o hash.o ${LDFLAGS} `freetype-config --cflags --libs`
 
 dmenu_path: dmenu_path.o
 
