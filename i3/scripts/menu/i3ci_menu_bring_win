@@ -10,7 +10,7 @@ from feeders import windows as feeder
 from i3_actions import bring_window
 
 
-PARSER = argparse.ArgumentParser(prog='i3ci-menu_bring_win')
+PARSER = argparse.ArgumentParser(prog='i3ci_menu_bring_win')
 common.add_monitor_param(PARSER)
 
 

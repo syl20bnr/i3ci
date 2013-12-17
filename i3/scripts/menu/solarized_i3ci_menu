@@ -1,6 +1,6 @@
 #!/bin/sh
-# Invoke i3ci-menu with solarized colors and additional config
+# Invoke i3ci_menu with solarized colors and additional config
 # A prompt can be passed as a parameter
 
-~/.i3/bin/i3ci-menu -i -b -h 20 -p "$1" $2 \
+~/.i3/bin/i3ci_menu -i -b -h 20 -p "$1" $2 \
       -nb "#002b36" -nf "#657b83" -sb "#859900" -sf "#eee8d5"

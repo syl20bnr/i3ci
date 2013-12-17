@@ -2,16 +2,16 @@
 # -*- mode: python -*-
 
 # author: syl20bnr (2013)
-# goal: Launch an application via i3ci-menu on the specified monitor.
+# goal: Launch an application via i3ci_menu on the specified monitor.
 
 import argparse
 
 import common
-from feeders import i3ci-menu_path as feeder
+from feeders import dmenu_path as feeder
 from i3_actions import launch_app
 
 
-PARSER = argparse.ArgumentParser(prog='i3ci-menu_run')
+PARSER = argparse.ArgumentParser(prog='i3ci_menu_run')
 common.add_monitor_param(PARSER)
 common.add_free_param(PARSER)
 

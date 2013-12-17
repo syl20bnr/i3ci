@@ -10,7 +10,7 @@ from feeders import free_workspaces as feeder
 from i3_actions import send_window_to_free_workspace
 
 
-PARSER = argparse.ArgumentParser(prog='i3ci-menu_send_win_to_free_wks')
+PARSER = argparse.ArgumentParser(prog='i3ci_menu_send_win_to_free_wks')
 common.add_monitor_param(PARSER)
 
 if __name__ == '__main__':

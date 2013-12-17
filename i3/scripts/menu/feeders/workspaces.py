@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # author: syl20bnr (2013)
-# Feeder for i3ci-menu: Returns to stdout the list of all possible workspaces
+# Feeder for i3ci_menu: Returns to stdout the list of all possible workspaces
 
 import string
 

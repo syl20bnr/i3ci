@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # author: syl20bnr (2013)
-# Feeder for i3ci-menu: Returns a list of i3 commands depending on prefix.
+# Feeder for i3ci_menu: Returns a list of i3 commands depending on prefix.
 
 
 def get_prompt(prefix):

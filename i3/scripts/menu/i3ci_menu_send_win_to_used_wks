@@ -1,19 +1,19 @@
 #!/usr/bin/env python
 
 # author: syl20bnr (2013)
-# goal: Go to the selected i3 window
+# goal: Send the current window to a used workspace on the specified output.
 
 import argparse
 
 import common
 from feeders import cur_workspaces as feeder
-from i3_actions import jump_to_currently_used_workspace
+from i3_actions import send_window_to_used_workspace
 
 
-PARSER = argparse.ArgumentParser(prog='i3ci-menu_jump_cur_used_wks')
+PARSER = argparse.ArgumentParser(prog='i3ci_menu_send_win_to_used_wks')
 common.add_monitor_param(PARSER)
 
 if __name__ == '__main__':
     args = PARSER.parse_args()
     mon = common.get_monitor_value(args)
-    jump_to_currently_used_workspace(feeder, mon)
+    send_window_to_used_workspace(feeder, mon)

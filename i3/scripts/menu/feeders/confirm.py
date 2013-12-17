@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # author: syl20bnr (2013)
-# Feeder for i3ci-menu: Returns Ok, Cancel tokens :-)
+# Feeder for i3ci_menu: Returns Ok, Cancel tokens :-)
 
 
 def get_prompt(action):

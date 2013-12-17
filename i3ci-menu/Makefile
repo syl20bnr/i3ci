@@ -7,7 +7,7 @@ SRC = i3ci-menu.c draw.c stest.c hash.c
 OBJ = ${SRC:.c=.o}
 PROG = i3ci-menu
 
-all: i3ci-menu stest
+all: i3ci-menu dmenu_path stest
 
 options:
 	@echo i3ci-menu build options:
@@ -25,17 +25,23 @@ i3ci-menu: i3ci-menu.o draw.o hash.o
 	@echo CC -o $@
 	@${CC} -o ${PROG} i3ci-menu.o draw.o hash.o ${LDFLAGS} `freetype-config --cflags --libs`
 
+dmenu_path: dmenu_path.o
+
+dmenu_path:
+	@echo CC -o $@
+	@${CC} -o $@ $+ ${LDFLAGS}
+
 stest: stest.o
 	@echo CC -o $@
 	@${CC} -o $@ stest.o ${LDFLAGS}
 
 clean:
-	@rm -f ${PROG} stest ${OBJ} ${PROG}-${VERSION}.tar.gz
+	@rm -f ${PROG} dmenu_path stest ${OBJ} ${PROG}-${VERSION}.tar.gz
 
 dist: clean
 	@echo creating dist tarball
 	@mkdir -p ${PROG}-${VERSION}
-	@cp LICENSE Makefile README config.mk ${PROG}.1 draw.h ${PROG}_run stest.1 ${SRC} ${PROG}-${VERSION}
+	@cp LICENSE Makefile README config.mk ${PROG}.c ${PROG}.1 draw.h dmenu_path.c stest.1 ${SRC} ${PROG}-${VERSION}
 	@tar -cf ${PROG}-${VERSION}.tar ${PROG}-${VERSION}
 	@gzip ${PROG}-${VERSION}.tar
 	@rm -rf ${PROG}-${VERSION}
@@ -43,9 +49,9 @@ dist: clean
 install: all
 	@echo installing executables to ${DESTDIR}${PREFIX}/bin
 	@mkdir -p ${DESTDIR}${PREFIX}/bin
-	@cp -f ${PROG} ${PROG}_run stest ${DESTDIR}${PREFIX}/bin
+	@cp -f ${PROG} dmenu_path stest ${DESTDIR}${PREFIX}/bin
 	@chmod 755 ${DESTDIR}${PREFIX}/bin/${PROG}
-	@chmod 755 ${DESTDIR}${PREFIX}/bin/${PROG}_run
+	@chmod 755 ${DESTDIR}${PREFIX}/bin/dmenu_path
 	@chmod 755 ${DESTDIR}${PREFIX}/bin/stest
 	@echo installing manual pages to ${DESTDIR}${MANPREFIX}/man1
 	@mkdir -p ${DESTDIR}${MANPREFIX}/man1
@@ -57,7 +63,7 @@ install: all
 uninstall:
 	@echo removing executables from ${DESTDIR}${PREFIX}/bin
 	@rm -f ${DESTDIR}${PREFIX}/bin/${PROG}
-	@rm -f ${DESTDIR}${PREFIX}/bin/${PROG}_run
+	@rm -f ${DESTDIR}${PREFIX}/bin/dmenu_path
 	@rm -f ${DESTDIR}${PREFIX}/bin/stest
 	@echo removing manual page from ${DESTDIR}${MANPREFIX}/man1
 	@rm -f ${DESTDIR}${MANPREFIX}/man1/${PROG}.1

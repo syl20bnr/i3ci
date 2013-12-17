@@ -1,11 +1,11 @@
 # author: syl20bnr (2013)
-# goal: Create a i3ci-menu process.
+# goal: Create a i3ci_menu process.
 
 import os
 from subprocess import Popen, PIPE
 
 MODULE_PATH = os.path.dirname(os.path.abspath(__file__))
-DMENU = os.path.normpath(os.path.join(MODULE_PATH, '../../bin/i3ci-menu'))
+MENU = os.path.normpath(os.path.join(MODULE_PATH, '../../bin/i3ci-menu'))
 
 
 def call(p=None,
@@ -20,10 +20,10 @@ def call(p=None,
          nf='#657b83',
          sb='#859900',
          sf='#eee8d5'):
-    ''' Returns a i3ci-menu process with the specified title and number
+    ''' Returns a i3ci_menu process with the specified title and number
     of rows.
     '''
-    cmd = [DMENU, '-f', '-i', '-lmax', str(lmax), '-y', '19',
+    cmd = [MENU, '-f', '-i', '-lmax', str(lmax), '-y', '19',
            '-fn', f, '-nb', nb, '-nf', nf, '-sb', sb, '-sf', sf]
     if p:
         cmd.extend(['-p', p])
@@ -37,5 +37,6 @@ def call(p=None,
         cmd.extend(['-a', str(a)])
     if m is not None and m != 'all' and m != -1:
         cmd.extend(['-m', str(m)])
-    i3ci-menu = Popen(cmd, stdin=PIPE, stdout=PIPE)
-    return i3ci-menu
+    print cmd
+    i3ci_menu = Popen(cmd, stdin=PIPE, stdout=PIPE)
+    return i3ci_menu

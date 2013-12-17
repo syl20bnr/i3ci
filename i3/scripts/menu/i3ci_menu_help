@@ -6,11 +6,11 @@
 import argparse
 from subprocess import Popen
 
-import i3ci-menu
+import i3ci_menu
 from constants import DMENU_MAX_ROW, DMENU_FONT, DMENU_HEIGHT
 
 
-PARSER = argparse.ArgumentParser(prog='i3ci-menu_jump_win')
+PARSER = argparse.ArgumentParser(prog='i3ci_menu_jump_win')
 PARSER.add_argument('-m', '--mode',
                     default=None,
                     help='mode name.')
@@ -21,7 +21,7 @@ if __name__ == '__main__':
     help_ = ['[a] application',
              '[t] terminal',
              '[w] workspace']
-    proc = i3ci-menu.call(p="help",
+    proc = i3ci_menu.call(p="help",
                       lv=False,
                       f=DMENU_FONT,
                       h=DMENU_HEIGHT)

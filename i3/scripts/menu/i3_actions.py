@@ -9,7 +9,7 @@ from subprocess import Popen, PIPE
 import i3
 from Xlib import display
 
-import i3ci-menu
+import i3ci_menu
 from constants import DMENU_MAX_ROW, DMENU_FONT, DMENU_HEIGHT
 from feeders import (cur_workspace,
                      cur_workspaces,
@@ -18,7 +18,7 @@ from feeders import (cur_workspace,
 
 
 MODULE_PATH = os.path.dirname(os.path.abspath(__file__))
-# DMENU = os.path.normpath(os.path.join(MODULE_PATH, '../../bin/i3ci-menu'))
+# DMENU = os.path.normpath(os.path.join(MODULE_PATH, '../../bin/i3ci_menu'))
 
 
 class Action(object):
@@ -27,9 +27,9 @@ class Action(object):
     def __init__(self):
         self._actions = []
 
-    def add_action(self, acTion, args=None):
+    def add_action(self, action, args=None):
         if args:
-            acTion = action.__call__(self, *args)
+            action = action.__call__(self, *args)
         else:
             action = action.__call__(self)
         self._actions.append(action)
@@ -138,7 +138,7 @@ def launch_app(feeder, app=None, output='all', free=False):
     if not reply:
         input_ = feeder.feed().encode('utf-8')
         size = get_max_row(len(input_))
-        proc = i3ci-menu.call(lmax=size,
+        proc = i3ci_menu.call(lmax=size,
                           f=DMENU_FONT,
                           h=DMENU_HEIGHT)
         reply = proc.communicate(input_)[0]
@@ -147,7 +147,7 @@ def launch_app(feeder, app=None, output='all', free=False):
         if '-cd' in reply:
             # MODULE_PATH = os.path.dirname(os.path.abspath(__file__))
             # DMENU = os.path.normpath(os.path.join(MODULE_PATH,
-            # '../../bin/i3ci-menu'))
+            # '../../bin/i3ci_menu'))
             xcwd = Popen('xcwd', stdin=PIPE, stdout=PIPE).communicate()[0]
             reply = '"' + reply + ' ' + xcwd + '"'
         if not free and (output == 'all' or
@@ -202,10 +202,10 @@ def clone_window(output='all', free=False):
 
 
 def jump_to_window(feeder, inst, output='all'):
-    ''' Jump to the window chosen by the user using i3ci-menu. '''
+    ''' Jump to the window chosen by the user using i3ci_menu. '''
     (wins, d) = feeder.feed(inst, output)
     size = get_max_row(len(wins))
-    proc = i3ci-menu.call(f=DMENU_FONT,
+    proc = i3ci_menu.call(f=DMENU_FONT,
                       lmax=size,
                       sb='#b58900')
     reply = proc.communicate('\n'.join(wins).encode('utf-8'))[0]
@@ -220,10 +220,10 @@ def jump_to_window(feeder, inst, output='all'):
 
 
 def jump_to_workspace(feeder):
-    ''' Jump to the workspace chosen by the user using i3ci-menu. '''
+    ''' Jump to the workspace chosen by the user using i3ci_menu. '''
     input_ = '\n'.join(feeder.feed()).encode('utf-8')
     size = get_max_row(len(input_))
-    proc = i3ci-menu.call(h=DMENU_HEIGHT,
+    proc = i3ci_menu.call(h=DMENU_HEIGHT,
                       lmax=size,
                       r=True,
                       sb='#d33682')
@@ -240,11 +240,11 @@ def jump_to_workspace(feeder):
 
 def jump_to_currently_used_workspace(feeder, output='all'):
     ''' Jump to a curently used workspace on the specified outputs
-    and chosen by the user using i3ci-menu.
+    and chosen by the user using i3ci_menu.
     '''
     input_ = '\n'.join(feeder.feed(output)).encode('utf-8')
     size = get_max_row(len(input_))
-    proc = i3ci-menu.call(f=DMENU_FONT,
+    proc = i3ci_menu.call(f=DMENU_FONT,
                       h=DMENU_HEIGHT,
                       lmax=size,
                       r=True,
@@ -273,7 +273,7 @@ def send_workspace_to_output(feeder, output='all'):
         fouts = [k for k, v in outs.iteritems() if v != coutput]
         input_ = '\n'.join(sorted(fouts)).encode('utf-8')
         size = get_max_row(len(input_))
-        proc = i3ci-menu.call(f=DMENU_FONT,
+        proc = i3ci_menu.call(f=DMENU_FONT,
                           h=DMENU_HEIGHT,
                           lmax=size,
                           r=False,
@@ -297,7 +297,7 @@ def send_window_to_output(feeder, output='all'):
         fouts = [k for k, v in outs.iteritems() if v != coutput]
         input_ = '\n'.join(sorted(fouts)).encode('utf-8')
         size = get_max_row(len(input_))
-        proc = i3ci-menu.call(f=DMENU_FONT,
+        proc = i3ci_menu.call(f=DMENU_FONT,
                           h=DMENU_HEIGHT,
                           lmax=size,
                           r=False,
@@ -317,7 +317,7 @@ def send_window_to_workspace(feeder):
     ''' Send the current window to the selected workspace. '''
     input_ = '\n'.join(feeder.feed()).encode('utf-8')
     size = get_max_row(len(input_))
-    proc = i3ci-menu.call(f=DMENU_FONT,
+    proc = i3ci_menu.call(f=DMENU_FONT,
                       h=DMENU_HEIGHT,
                       lmax=size,
                       r=True,
@@ -354,7 +354,7 @@ def send_window_to_used_workspace(feeder, output):
     ''' Send the current window to a used workspace on the given output. '''
     input_ = '\n'.join(feeder.feed(output)).encode('utf-8')
     size = get_max_row(len(input_))
-    proc = i3ci-menu.call(f=DMENU_FONT,
+    proc = i3ci_menu.call(f=DMENU_FONT,
                       h=DMENU_HEIGHT,
                       lmax=size,
                       r=True,
@@ -373,14 +373,14 @@ def send_window_to_used_workspace(feeder, output):
 
 def _choose_other_windows(feeder, output):
     '''
-    Launch a i3ci-menu instance to select a window which is not on the current
+    Launch a i3ci_menu instance to select a window which is not on the current
     worspace.
     Return a tuple composed of the window name and the window id.
     Return None if nothing has been selected.
     '''
     (wins, d) = feeder.feed(output=output)
     size = get_max_row(len(wins))
-    proc = i3ci-menu.call(f=DMENU_FONT,
+    proc = i3ci_menu.call(f=DMENU_FONT,
                       lmax=size,
                       sb='#6c71c4')
     ws = cur_workspace.feed()
@@ -454,7 +454,7 @@ def focus_nth_window(nth, ws=None):
 def logout():
     from feeders import logout as logout_feeder
     from feeders import confirm
-    proc = i3ci-menu.call(f=DMENU_FONT,
+    proc = i3ci_menu.call(f=DMENU_FONT,
                       lmax=4,
                       nb='#002b36',
                       nf='#eee8dc',
@@ -466,7 +466,7 @@ def logout():
         action = Action()
         action.add_action(Action.set_mode, ("confirm {0} ?".format(reply),))
         action.process()
-        proc = i3ci-menu.call(f=DMENU_FONT,
+        proc = i3ci_menu.call(f=DMENU_FONT,
                           lmax=4,
                           nb='#002b36',
                           nf='#eee8dc',
@@ -486,7 +486,7 @@ def logout():
 
 def execute_cmd(feeder, prefix):
     ''' Execute: i3-msg prefix *user_choice* '''
-    proc = i3ci-menu.call(p=feeder.get_prompt(prefix),
+    proc = i3ci_menu.call(p=feeder.get_prompt(prefix),
                       f=DMENU_FONT,
                       h=DMENU_HEIGHT,
                       sb='#cb4b16')

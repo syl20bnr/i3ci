@@ -6,7 +6,7 @@
 import argparse
 
 import common
-from feeders import i3ci-menu_path as feeder
+from feeders import i3ci_menu_path as feeder
 from i3_actions import launch_app
 
 

@@ -10,7 +10,7 @@ from feeders import outputs as feeder
 from i3_actions import send_window_to_output
 
 
-PARSER = argparse.ArgumentParser(prog='i3ci-menu_send_win_to_output')
+PARSER = argparse.ArgumentParser(prog='i3ci_menu_send_win_to_output')
 common.add_monitor_param(PARSER)
 
 if __name__ == '__main__':

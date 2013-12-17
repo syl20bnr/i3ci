@@ -10,7 +10,7 @@ from feeders import windows as feeder
 from i3_actions import jump_to_window
 
 
-PARSER = argparse.ArgumentParser(prog='i3ci-menu_jump_win')
+PARSER = argparse.ArgumentParser(prog='i3ci_menu_jump_win')
 common.add_monitor_param(PARSER)
 PARSER.add_argument('-i', '--instance',
                     default=None,

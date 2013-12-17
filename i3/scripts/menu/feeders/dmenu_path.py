@@ -1,11 +1,16 @@
 #!/usr/bin/env python
 
 # author: syl20bnr (2013)
-# Feeder for i3ci-menu: Returns applications under paths.
+# Feeder for i3ci_menu: Returns applications under paths.
 
+import os
 from subprocess import Popen, PIPE
 
 import common
+
+MODULE_PATH = os.path.dirname(os.path.abspath(__file__))
+DMENU_PATH = os.path.normpath(os.path.join(MODULE_PATH,
+                                           '../../../bin/dmenu_path'))
 
 
 def get_prompt(free, output='all'):
@@ -23,7 +28,7 @@ def get_prompt(free, output='all'):
 def feed(win_inst=None, output='all'):
     ''' Returns a list of all found executables under paths.
     '''
-    p = Popen('i3ci-menu_path', stdout=PIPE, stderr=PIPE, shell=True)
+    p = Popen(DMENU_PATH, stdout=PIPE, stderr=PIPE, shell=True)
     return p.stdout.read()
 
 

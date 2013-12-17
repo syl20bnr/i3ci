@@ -18,6 +18,7 @@ install: all
 	cp -r i3/ $(INSTALL)
 	mkdir -p $(INSTALL)/bin
 	cp i3ci-menu/i3ci-menu $(INSTALL)/bin
+	cp i3ci-menu/dmenu_path $(INSTALL)/bin
 
 update: install
 	@echo Restarting i3 config...

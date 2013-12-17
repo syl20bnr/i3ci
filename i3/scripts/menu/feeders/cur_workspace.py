@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # author: syl20bnr (2013)
-# Feeder for i3ci-menu: Returns the current workspace name.
+# Feeder for i3ci_menu: Returns the current workspace name.
 
 import i3
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # author: syl20bnr (2013)
-# Feeder for i3ci-menu: Returns to stdout the current focused window ID.
+# Feeder for i3ci_menu: Returns to stdout the current focused window ID.
 
 import i3
 

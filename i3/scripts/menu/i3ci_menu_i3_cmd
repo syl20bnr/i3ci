@@ -10,7 +10,7 @@ from feeders import i3cmd as feeder
 from i3_actions import execute_cmd
 
 
-PARSER = argparse.ArgumentParser(prog='i3ci-menu_i3_cmd')
+PARSER = argparse.ArgumentParser(prog='i3ci_menu_i3_cmd')
 PARSER.add_argument('-p', '--prefix',
                     default=None,
                     help='Command prefix.')
