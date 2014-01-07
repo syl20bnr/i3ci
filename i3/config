@@ -46,8 +46,11 @@ font xft:Ubuntu bold  8
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
+# no wast of pixels
+hide_edge_borders both
+
 # Special window properties
-for_window [class="Emacs"] border none
+for_window [class="Emacs"] border 1pixel
 for_window [instance=chromium-browser] border 1pixel
 for_window [title="yEd"] border 1pixel
 for_window [title="$term"] border 1pixel
