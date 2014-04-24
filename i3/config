@@ -1062,8 +1062,8 @@ mode "$func_display_work_mode" {
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $func_display_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         c           exec xrandr -s 0, mode $default
-    bindsym         d           exec xrandr -s 1, mode $default
+    bindsym         c           exec xrandr --output DVI-I-2 --auto --same-as DVI-I-3
+    bindsym         d           exec xrandr --output DVI-I-2 --auto --left-of DVI-I-3
 }
 
 # Mode: logout -----------------------------------------------------------
