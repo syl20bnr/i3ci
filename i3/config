@@ -1088,9 +1088,9 @@ exec --no-startup-id gnome-settings-daemon
 exec --no-startup-id $wallpaper
 
 # home
-exec --no-startup-id u1sdtool --start
-exec --no-startup-id /usr/lib/indicator-ubuntuone/indicator-ubuntuone
+#exec --no-startup-id u1sdtool --start
+#exec --no-startup-id /usr/lib/indicator-ubuntuone/indicator-ubuntuone
 
 # work
-#exec --no-startup-id synergy
-#exec --no-startup-id /home/sbenner/.mouse_sens.sh
+exec --no-startup-id synergys --no-tray --daemon
+exec --no-startup-id /home/sbenner/.mouse_sens.sh
