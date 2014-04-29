@@ -31,17 +31,17 @@ def get_natural_monitor_value(output):
     return mon
 
 
-def add_free_param(parser, mandatory=False):
-    parser.add_argument('-f', '--free',
-                        action='store_true',
-                        default=False,
-                        required=mandatory,
-                        help=('If true the action is performed on a free '
-                              'workspace.'))
-
-
 def get_output_index(output):
     m = re.match('^xinerama-([0-9]+)$', output)
     if m:
         return int(m.group(1))
     return None
+
+
+def add_new_workspace_param(parser, mandatory=False):
+    parser.add_argument(
+        '-n', '--new',
+        action='store_true',
+        default=False,
+        required=mandatory,
+        help=('The command is performed in a new workspace.'))

@@ -7,7 +7,6 @@ import inspect
 import argparse
 
 
-# ----------------------------------------------------------------------------
 # Constants
 # ----------------------------------------------------------------------------
 
@@ -18,7 +17,6 @@ I3CI_CMD_HOME_DIR = '.i3ci'
 I3CI_CMD_HOME = os.path.join(os.path.expanduser("~"), I3CI_CMD_HOME_DIR)
 
 
-# ----------------------------------------------------------------------------
 # Main
 # ----------------------------------------------------------------------------
 
@@ -30,7 +28,7 @@ def main():
         cmds = init_subparsers(parser)
         args = parser.parse_args()
         cmd = get_selected_cmd(cmds)
-        if not cmd.validate_options(args):
+        if not cmd.validate_args(args):
             exit(1)
         cmd.process()
     except Exception:
@@ -40,7 +38,6 @@ def main():
         exit(1)
 
 
-# ----------------------------------------------------------------------------
 # Implementation
 # ----------------------------------------------------------------------------
 
@@ -49,31 +46,26 @@ def init_include_dirs():
 
 
 def init_parser():
-    '''
-    '''
     parser = argparse.ArgumentParser(
         prog=I3CI_CMD_PROG_NAME,
         version='%(prog)s version ' + '0.1',
         description=('i3 config improved Command Line Interface.'),
         epilog=('Support: sylvain.benner@gmail.com'))
-    parser.add_argument('--debug',
-                        action='store_true',
-                        help=('display the call stack if an exception is '
-                              'raised.'))
+    parser.add_argument(
+        '--debug',
+        action='store_true',
+        help=('display the call stack if an exception is '
+              'raised.'))
     return parser
 
 
 def init_subparsers(parser):
-    '''
-    '''
     import commands
     cmd_modules = {}
     mod_all_cmds = sys.modules['commands']
     classes = inspect.getmembers(mod_all_cmds, inspect.isclass)
     subparsers = parser.add_subparsers(
-        title='i3ci commands',
-        description=('For more help about a command type: '
-                     'i3ci_cmd <command> -h'),
+        title='Command categories',
         metavar='')
     for c in classes:
         c_inst = c[1]()
@@ -85,8 +77,6 @@ def init_subparsers(parser):
 
 
 def get_selected_cmd(modules):
-    '''
-    '''
     sel = [x for x in modules.keys() if x in sys.argv]
     if not sel:
         print('Error: no command specified.')

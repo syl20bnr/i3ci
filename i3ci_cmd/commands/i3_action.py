@@ -88,3 +88,13 @@ class Action(object):
     def cmd(self, cmd):
         # wonderful method :-)
         return cmd
+
+
+def default_mode(action=None):
+    ''' Add or perform an action to set the default mode. '''
+    if action:
+        action.add_action(Action.set_default_mode)
+    else:
+        action = Action()
+        action.add_action(Action.set_default_mode)
+        action.process()

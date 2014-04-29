@@ -1,10 +1,11 @@
 import common
 import i3_utils
 import command
+from i3_action import Action
 
 
-class current_workspace(command.Command):
-    ''' Output the name of the current workspace. '''
+class workspaces(command.Command):
+    ''' Return a list of all currently opened workspaces. '''
 
     def init_parser(self, parser):
         common.add_monitor_param(
@@ -19,8 +20,8 @@ class current_workspace(command.Command):
         return True
 
     def process(self):
-        workspace = i3_utils.get_current_workspace(self._mon)
-        if workspace:
-            print workspace[0]['name']
-        else:
-            print ''
+        wks = cur_workspace.feed(mon)
+        action = Action()
+        action.add_action(Action.jump_to_workspace, (wks,))
+        default_mode(action)
+        action.process()

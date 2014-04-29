@@ -1,3 +1,3 @@
-from current_output import current_output
-from current_workspace import current_workspace
-from focus_window import focus_window
+from do import do
+from info import info
+from menu import menu

@@ -1,25 +1,15 @@
-#!/usr/bin/env python
-# Description:
-# Focus the nth window in the current workspace (limited to 10 firsts)
 import command
 import i3_utils
-from action import Action
+from i3_action import Action
 
 
 class focus_window(command.Command):
     ''' Focus the nth window of the current workspace.
      Only the first 10 windows can be focused [0, 9]. '''
 
-    def __init__(self):
-        self._args = None
-
     def init_parser(self, parser):
-        '''
-        Command specific subpargers and arguments.
-        '''
         parser.add_argument(
-            '-i', '--index',
-            required=True,
+            'index',
             type=int,
             choices=range(0, 10),
             help=('Window index. The order depends on the layout tree so '
@@ -36,12 +26,11 @@ class focus_window(command.Command):
                   'workspace is selected.'))
         return self
 
-    def validate_options(self, pargs):
-        self._args = pargs
+    def validate_args(self, args):
+        self._args = args
         return True
 
     def process(self):
-        ''' Roughly focus the nth window in the hierarchy. '''
         wins = i3_utils.get_windows_from_workspace(self._args.workspace)
         action = Action()
         nth = self._args.index
