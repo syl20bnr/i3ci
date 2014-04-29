@@ -29,7 +29,7 @@ def get_current_output():
 # Workspaces
 # -----------------------------------------------------------------------------
 
-def get_workspaces_names():
+def get_workspace_name_catalog():
     ''' Returns a raw list of all possible workspace names formed
     with one char. '''
     return ([str(x) for x in range(0, 10)] +
@@ -46,7 +46,7 @@ def get_workspaces(mon='all'):
     outs = get_outputs_dictionary()
     for o in outs.itervalues():
         if mon == 'all' or mon == o:
-            for ws in get_workspaces_names():
+            for ws in get_workspace_name_catalog():
                 if i3.filter(tree=ws_tree, output=o, name=ws):
                     used.append(ws)
     used.append('`')
@@ -62,10 +62,25 @@ def get_current_workspace(mon='all'):
         return i3.filter(tree=workspaces, output=mon, visible=True)[0]['name']
 
 
+def get_current_workspaces(mon='all'):
+    ''' Returns a list of the names of all currently used workspaces on the
+    specified output. '''
+    all_ws = get_workspace_name_catalog()
+    used = []
+    ws_tree = i3.msg('get_workspaces')
+    outs = get_outputs_dictionary()
+    for o in outs.itervalues():
+        if mon == 'all' or mon == o:
+            for ws in all_ws:
+                if i3.filter(tree=ws_tree, output=o, name=ws):
+                    used.append(ws)
+    return sorted(used)
+
+
 def get_free_workspaces():
     ''' Returns the free workspace names '''
     res = []
-    all_workspaces = get_workspaces_names()
+    all_workspaces = get_workspace_name_catalog()
     used_workspaces = i3.msg('get_workspaces')
     for w in all_workspaces:
         if not i3.filter(tree=used_workspaces, name=w):
