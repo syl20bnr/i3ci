@@ -1,6 +1,4 @@
-import command
-import i3_utils
-from i3_action import Action
+from commands import *
 
 
 class focus_window(command.Command):

@@ -1,7 +1,4 @@
-import command
-import common
-import i3_utils
-import i3_action
+from commands import *
 
 
 class focus_active_workspace(command.Command):
@@ -17,8 +14,7 @@ class focus_active_workspace(command.Command):
 
     def process(self):
         wks = i3_utils.get_current_workspace(self._mon)
-        cls = i3_action.Action
-        action = cls()
-        action.add_action(cls.jump_to_workspace, (wks,))
+        action = Action()
+        action.add_action(Action.jump_to_workspace, (wks,))
         i3_action.default_mode(action)
         action.process()

@@ -60,9 +60,9 @@ def init_parser():
 
 
 def init_subparsers(parser):
-    import commands
+    import commands.categories
     cmd_modules = {}
-    mod_all_cmds = sys.modules['commands']
+    mod_all_cmds = sys.modules['commands.categories']
     classes = inspect.getmembers(mod_all_cmds, inspect.isclass)
     subparsers = parser.add_subparsers(
         title='Command categories',

@@ -1,10 +1,7 @@
 from subprocess import Popen, PIPE
 
-import command
-import common
-import i3_utils
-import i3_action
-import menu_utils
+from commands import *
+from commands import menu_utils
 
 
 class start_application(command.Command):
@@ -36,7 +33,6 @@ class start_application(command.Command):
             proc = menu_utils.create_menu(lmax=size)
             reply = proc.communicate(input_)[0]
         if reply:
-            cls = i3_action.Action
             reply = reply.decode('utf-8')
             if '-cd' in reply:
                 # MODULE_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -48,8 +44,8 @@ class start_application(command.Command):
                     self._mon == 'all' or
                     self._mon == i3_utils.get_current_output()):
                 # open on the current workspace
-                action = cls()
-                action.add_action(cls.exec_, (reply,))
+                action = Action()
+                action.add(Action.exec_, (reply,))
                 i3_action.default_mode(action)
                 action.process()
             if not self._new and (
@@ -57,9 +53,9 @@ class start_application(command.Command):
                     self._mon != i3_utils.get_current_output()):
                 # open on the visible workspace on another output
                 otherw = i3_utils.get_current_workspace(self._mon)
-                action = cls()
-                action.add_action(cls.jump_to_workspace, (otherw,))
-                action.add_action(cls.exec_, (reply,))
+                action = Action()
+                action.add(Action.jump_to_workspace, (otherw,))
+                action.add(Action.exec_, (reply,))
                 i3_action.default_mode(action)
                 action.process()
             elif self._new and (
@@ -67,9 +63,9 @@ class start_application(command.Command):
                     self._mon == i3_utils.get_current_output()):
                 # new workspace on the current output
                 neww = i3_utils.get_free_workspaces()[0]
-                action = cls()
-                action.add_action(cls.jump_to_workspace, (neww,))
-                action.add_action(cls.exec_, (reply,))
+                action = Action()
+                action.add(Action.jump_to_workspace, (neww,))
+                action.add(Action.exec_, (reply,))
                 i3_action.default_mode(action)
                 action.process()
             elif self._new and (
@@ -77,10 +73,10 @@ class start_application(command.Command):
                     self._mon != i3_utils.get_current_output()):
                 # new workspace on another output
                 neww = i3_utils.get_free_workspaces()[0]
-                action = cls()
-                action.add_action(cls.focus_output, (self._mon,))
-                action.add_action(cls.jump_to_workspace, (neww,))
-                action.add_action(cls.exec_, (reply,))
+                action = Action()
+                action.add(Action.focus_output, (self._mon,))
+                action.add(Action.jump_to_workspace, (neww,))
+                action.add(Action.exec_, (reply,))
                 i3_action.default_mode(action)
                 action.process()
         else:

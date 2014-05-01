@@ -7,7 +7,7 @@ class Action(object):
     def __init__(self):
         self._actions = []
 
-    def add_action(self, action, args=None):
+    def add(self, action, args=None):
         if args:
             action = action.__call__(self, *args)
         else:
@@ -93,8 +93,8 @@ class Action(object):
 def default_mode(action=None):
     ''' Add or perform an action to set the default mode. '''
     if action:
-        action.add_action(Action.set_default_mode)
+        action.add(Action.set_default_mode)
     else:
         action = Action()
-        action.add_action(Action.set_default_mode)
+        action.add(Action.set_default_mode)
         action.process()

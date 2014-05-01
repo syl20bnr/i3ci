@@ -1,3 +1,4 @@
-from do import do
-from info import info
-from menu import menu
+import command
+import common
+import i3_utils
+from i3_action import Action
