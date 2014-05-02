@@ -1,18 +1,19 @@
-# -*- mode: python coding: utf-8 -*-
-# Description:
-# i3ci command line tool.
 import sys
 import os
-import inspect
 import argparse
 
+import params
+import command
+import utils
+import action
+__all__ = ['params', 'command', 'utils', 'action']
 
 # Constants
 # ----------------------------------------------------------------------------
 
 MODULE_NAME = os.path.splitext(os.path.basename(__file__))[0]
 SCRIPT_PATH = os.path.dirname(os.path.realpath(__file__))
-I3CI_CMD_PROG_NAME = MODULE_NAME
+I3CI_CMD_PROG_NAME = 'i3ci_cmd'
 I3CI_CMD_HOME_DIR = '.i3ci'
 I3CI_CMD_HOME = os.path.join(os.path.expanduser("~"), I3CI_CMD_HOME_DIR)
 
@@ -23,7 +24,6 @@ I3CI_CMD_HOME = os.path.join(os.path.expanduser("~"), I3CI_CMD_HOME_DIR)
 def main():
     try:
         init_include_dirs()
-        args = None
         parser = init_parser()
         cmds = init_subparsers(parser)
         args = parser.parse_args()
@@ -33,7 +33,7 @@ def main():
         cmd.process()
     except Exception:
         print('An error happened!')
-        if not args or args.debug:
+        if 'args' not in locals() or args.debug:
             print_traceback()
         exit(1)
 
@@ -60,20 +60,22 @@ def init_parser():
 
 
 def init_subparsers(parser):
-    import commands.categories
-    cmd_modules = {}
-    mod_all_cmds = sys.modules['commands.categories']
-    classes = inspect.getmembers(mod_all_cmds, inspect.isclass)
+    category_classes = {}
     subparsers = parser.add_subparsers(
         title='Command categories',
         metavar='')
-    for c in classes:
-        c_inst = c[1]()
-        cmd_modules[c[0]] = c_inst
+    categories = [f.replace('.py', '')
+                  for f in os.listdir(os.path.join(SCRIPT_PATH, "commands"))
+                  if f.endswith('.py') and '__init__' not in f]
+    for c in categories:
+        cmds = __import__('i3ci.commands', globals=globals(), fromlist=[c])
+        mod = cmds.__dict__[c]
+        cat = command.Category(module_name=c)
         parser = subparsers.add_parser(
-            c[0], help=c_inst.__doc__, description=c_inst.__doc__)
-        c_inst.init_parser(parser)
-    return cmd_modules
+            name=c, help=mod.__doc__, description=mod.__doc__)
+        cat.init_parser(parser)
+        category_classes[c] = cat
+    return category_classes
 
 
 def get_selected_cmd(modules):

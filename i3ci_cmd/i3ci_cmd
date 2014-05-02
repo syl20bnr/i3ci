@@ -3,5 +3,5 @@
 #
 # Description:
 # i3ci command line tool.
-import i3ci_cmd
-i3ci_cmd.main()
+import i3ci
+i3ci.main()

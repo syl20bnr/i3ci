@@ -1,5 +1,6 @@
 from abc import ABCMeta, abstractmethod
 import sys
+import inspect
 import os
 import re
 
@@ -34,27 +35,15 @@ class Category(Command):
 
     __metaclass__ = ABCMeta
 
-    # @abstractmethod
-    # def get_subcommands(self):
-    #     ''' Returns a list of command classes. '''
-
-    def __init__(self):
+    def __init__(self, module_name):
+        self._mname = '.'.join(('i3ci.commands', module_name))
         self._cmds = {}
 
     def get_subcommands(self):
-        # programmatically load all the subcommands
-        catpkg = "_{0}".format(self.__class__.__name__)
-        moddir = os.path.dirname(os.path.realpath(__file__))
-        path = os.path.join(moddir, 'categories', catpkg)
-        cmdnames = [f.replace('.py', '') for f in os.listdir(path)
-                    if re.match('.*py$', f) and 'init' not in f]
-        cmds = []
-        for cmdname in cmdnames:
-            relmodpath = 'categories.{0}.{1}'.format(catpkg, cmdname)
-            t = __import__(relmodpath, globals(), locals(), [cmdname], -1)
-            globals()[cmdname] = t.__dict__[cmdname]
-            cmds.append(t.__dict__[cmdname])
-        return cmds
+        mod = sys.modules[self._mname]
+        classes = inspect.getmembers(
+            mod, lambda x: inspect.isclass(x) and x.__module__ == self._mname)
+        return [cls for name, cls in classes]
 
     def init_parser(self, parser):
         subparsers = parser.add_subparsers(

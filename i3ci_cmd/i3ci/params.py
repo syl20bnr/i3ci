@@ -1,6 +1,6 @@
-# -*- mode: python coding: utf-8 -*-
-# Description:
-# Common functions for all commands.
+'''
+Common functions to declare and retrieve command line arguments.
+'''
 import re
 
 
