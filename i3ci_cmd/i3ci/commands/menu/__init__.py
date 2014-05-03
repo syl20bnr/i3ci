@@ -84,3 +84,61 @@ class start_application(command.Command):
                 a.process()
         else:
             action.default_mode()
+
+
+class create_workspace(command.Command):
+    ''' Create a workspace by choosing a name from the i3ci workspace
+    names catalog. '''
+
+    def init_parser(self, parser):
+        params.add_monitor_param(parser)
+        return self
+
+    def validate_args(self, args):
+        self._mon = params.get_monitor_value(args)
+        return True
+
+    def process(self):
+        input_ = '\n'.join(utils.get_workspace_name_catalog())
+        size = utils.get_max_row(len(input_))
+        proc = utils.create_menu(lmax=size,
+                                 lv=False,
+                                 r=True,
+                                 sb='#268bd2')
+        reply = proc.communicate(input_)[0]
+        if reply:
+            a = action.Action()
+            if self._mon != 'all':
+                a.add(action.Action.focus_output, (self._mon,))
+            a.add(action.Action.jump_to_workspace, (reply,))
+            action.default_mode(a)
+            a.process()
+        else:
+            action.default_mode()
+
+
+class jump_to_workspace(command.Command):
+    ''' Jump to an existing workspace. '''
+
+    def init_parser(self, parser):
+        params.add_monitor_param(parser)
+        return self
+
+    def validate_args(self, args):
+        self._mon = params.get_monitor_value(args)
+        return True
+
+    def process(self):
+        input_ = '\n'.join(utils.get_current_workspaces(self._mon))
+        size = utils.get_max_row(len(input_))
+        proc = utils.create_menu(lmax=size,
+                                 r=True,
+                                 sb='#268bd2')
+        reply = proc.communicate(input_)[0]
+        if reply:
+            a = action.Action()
+            a.add(action.Action.jump_to_workspace, (reply,))
+            action.default_mode(a)
+            a.process()
+        else:
+            action.default_mode()
