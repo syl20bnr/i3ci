@@ -60,19 +60,27 @@ def init_parser():
 
 
 def init_subparsers(parser):
-    category_classes = {}
     subparsers = parser.add_subparsers(
         title='Command categories',
         metavar='')
-    categories = [f.replace('.py', '')
-                  for f in os.listdir(os.path.join(SCRIPT_PATH, "commands"))
-                  if f.endswith('.py') and '__init__' not in f]
+    return create_categories_parser(
+        subparsers, "i3ci.commands", os.path.join(SCRIPT_PATH, "commands"))
+
+
+def create_categories_parser(pparser, ppkg, ppkg_path):
+    ''' Create a parser for each directory in ppkg_path.
+    "p" prefix means "parent". '''
+    category_classes = {}
+    categories = [f for f in os.listdir(ppkg_path)
+                  if os.path.isdir(os.path.join(ppkg_path, f))]
     for c in categories:
-        cmds = __import__('i3ci.commands', globals=globals(), fromlist=[c])
+        cmds = __import__(ppkg, globals=globals(), fromlist=[c])
         mod = cmds.__dict__[c]
-        cat = command.Category(module_name=c)
-        parser = subparsers.add_parser(
-            name=c, help=mod.__doc__, description=mod.__doc__)
+        cat = command.Category(ppkg, ppkg_path, c)
+        parser = pparser.add_parser(
+            name=c,
+            help='[category] {0}'.format(mod.__doc__),
+            description=mod.__doc__)
         cat.init_parser(parser)
         category_classes[c] = cat
     return category_classes

@@ -2,7 +2,8 @@ from abc import ABCMeta, abstractmethod
 import sys
 import inspect
 import os
-import re
+
+import i3ci
 
 
 class Command(object):
@@ -35,8 +36,10 @@ class Category(Command):
 
     __metaclass__ = ABCMeta
 
-    def __init__(self, module_name):
-        self._mname = '.'.join(('i3ci.commands', module_name))
+    def __init__(self, ppkg, ppkg_path, mname):
+        self._ppkg = ppkg
+        self._mpath = os.path.join(ppkg_path, mname)
+        self._mname = '.'.join((ppkg, mname))
         self._cmds = {}
 
     def get_subcommands(self):
@@ -47,8 +50,10 @@ class Category(Command):
 
     def init_parser(self, parser):
         subparsers = parser.add_subparsers(
-            title="Available commands",
+            title="Available sub-categories and commands",
             metavar='')
+        i3ci.create_categories_parser(
+            subparsers, self._mname, self._mpath)
         self._cmds = self._add_commands(
             subparsers,
             [c() for c in self.get_subcommands()])
@@ -72,6 +77,9 @@ class Category(Command):
         cmds = {}
         for c in commands:
             n = c.__class__.__name__
-            p = subparsers.add_parser(n, help=c.__doc__, description=c.__doc__)
+            p = subparsers.add_parser(
+                n,
+                help='[command] {0}'.format(c.__doc__),
+                description=c.__doc__)
             cmds[n] = c.init_parser(p)
         return cmds
