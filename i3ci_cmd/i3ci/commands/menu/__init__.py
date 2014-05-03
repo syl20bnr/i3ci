@@ -136,6 +136,11 @@ class jump_to_workspace(command.Command):
                                  sb='#268bd2')
         reply = proc.communicate(input_)[0]
         if reply:
+            # Weird corner case where 00 is returned instead of 0 when
+            # there is only one workspace named 0 on the choosen output.
+            # For now just make a dirty hack :-)
+            if reply == "00":
+                reply = "0"
             a = action.Action()
             a.add(action.Action.jump_to_workspace, (reply,))
             action.default_mode(a)
