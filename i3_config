@@ -980,7 +980,7 @@ mode "$func_mode" {
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $default
     bindsym         d           mode $func_display_mode
-    bindsym         e           mode $func_exit_mode, exec $i3ci_cmd/i3ci_menu_logout
+    bindsym         e           mode $func_exit_mode, exec $i3cibin/i3ci_cmd menu system
     bindsym         l           mode $func_layout_mode
     bindsym   shift+l           exec i3lock, mode $default
     bindsym         r           mode $func_resize_mode
