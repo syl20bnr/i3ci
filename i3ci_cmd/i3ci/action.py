@@ -13,6 +13,7 @@ class Action(object):
         else:
             action = action.__call__(self)
         self._actions.append(action)
+        return self
 
     def get_command(self):
         return 'i3-msg ' + ','.join(self._actions)

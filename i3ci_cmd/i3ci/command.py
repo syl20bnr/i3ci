@@ -20,7 +20,6 @@ class Command(object):
 
     def init_parser(self, parser):
         ''' Declare command specific subparsers and arguments. '''
-        return self
 
     def validate_args(self, args):
         ''' Validate the arguments and return True if the command
@@ -52,11 +51,11 @@ class Category(Command):
         subparsers = parser.add_subparsers(
             title="Available sub-categories and commands",
             metavar='')
-        i3ci.create_categories_parser(
+        cats = i3ci.create_categories_parser(
             subparsers, self._mname, self._mpath)
-        self._cmds = self._add_commands(
-            subparsers,
-            [c() for c in self.get_subcommands()])
+        cmds = self._add_commands(
+            subparsers, [c() for c in self.get_subcommands()])
+        self._cmds = dict(cats.items() + cmds.items())
 
     def validate_args(self, args):
         self._sel = [x for x in self._cmds.keys() if x in sys.argv]
@@ -81,5 +80,6 @@ class Category(Command):
                 n,
                 help='[command] {0}'.format(c.__doc__),
                 description=c.__doc__)
-            cmds[n] = c.init_parser(p)
+            c.init_parser(p)
+            cmds[n] = c
         return cmds

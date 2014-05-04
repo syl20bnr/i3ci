@@ -37,6 +37,6 @@ def call(p=None,
         cmd.extend(['-a', str(a)])
     if m is not None and m != 'all' and m != -1:
         cmd.extend(['-m', str(m)])
-    print cmd
+    # print cmd
     i3ci_menu = Popen(cmd, stdin=PIPE, stdout=PIPE)
     return i3ci_menu

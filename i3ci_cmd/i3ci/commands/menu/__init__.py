@@ -2,97 +2,47 @@
  Commands requiring the i3ci menu. To get the list of possible
 action type "i3ci_cmd menu -h"
  '''
-from subprocess import Popen, PIPE
-
 from i3ci import *
+from i3ci.commands import do
 
+
+# Application
+# ----------------------------------------------------------------------------
 
 class start_application(command.Command):
-    '''Start an application using i3ci_menu on the specified monitor. '''
+    '''Start an application on the specified monitor. The application is
+    chosen via the i3ci menu. '''
 
     def init_parser(self, parser):
         params.add_monitor_param(parser)
         params.add_new_workspace_param(parser)
-        parser.add_argument(
-            '-a', '--application',
-            type=str,
-            default=None,
-            required=False,
-            help=('Specify the application to launch. '
-                  'i3ci_menu will not be launched.'))
-        return self
 
     def validate_args(self, args):
         self._mon = params.get_monitor_value(args)
         self._new = args.new
-        self._app = args.application
         return True
 
     def process(self):
-        reply = self._app
-        if not reply:
-            input_ = utils.applications_feed()
-            size = utils.get_max_row(len(input_))
-            proc = utils.create_menu(lmax=size)
-            reply = proc.communicate(input_)[0]
+        input_ = utils.applications_feed()
+        size = utils.get_max_row(len(input_))
+        proc = utils.create_menu(lmax=size)
+        reply = proc.communicate(input_)[0]
         if reply:
             reply = reply.decode('utf-8')
-            if '-cd' in reply:
-                # MODULE_PATH = os.path.dirname(os.path.abspath(__file__))
-                # DMENU = os.path.normpath(os.path.join(MODULE_PATH,
-                # '../../bin/i3ci_menu'))
-                xcwd = Popen('xcwd', stdin=PIPE, stdout=PIPE).communicate()[0]
-                reply = '"' + reply + ' ' + xcwd + '"'
-            if not self._new and (
-                    self._mon == 'all' or
-                    self._mon == utils.get_current_output()):
-                # open on the current workspace
-                a = action.Action()
-                a.add(action.Action.exec_, (reply,))
-                action.default_mode(a)
-                a.process()
-            if not self._new and (
-                    self._mon != 'all' and
-                    self._mon != utils.get_current_output()):
-                # open on the visible workspace on another output
-                otherw = utils.get_current_workspace(self._mon)
-                a = action.Action()
-                a.add(action.Action.jump_to_workspace, (otherw,))
-                a.add(action.Action.exec_, (reply,))
-                action.default_mode(a)
-                a.process()
-            elif self._new and (
-                    self._mon == 'all' or
-                    self._mon == utils.get_current_output()):
-                # new workspace on the current output
-                neww = utils.get_free_workspaces()[0]
-                a = action.Action()
-                a.add(action.Action.jump_to_workspace, (neww,))
-                a.add(action.Action.exec_, (reply,))
-                action.default_mode(a)
-                a.process()
-            elif self._new and (
-                    self._mon != 'all' and
-                    self._mon != utils.get_current_output()):
-                # new workspace on another output
-                neww = utils.get_free_workspaces()[0]
-                a = action.Action()
-                a.add(action.Action.focus_output, (self._mon,))
-                a.add(action.Action.jump_to_workspace, (neww,))
-                a.add(action.Action.exec_, (reply,))
-                action.default_mode(a)
-                a.process()
+            do.start_application.launch(reply, self._mon, self._new)
         else:
             action.default_mode()
 
 
+# Workspaces
+# ----------------------------------------------------------------------------
+
 class create_workspace(command.Command):
     ''' Create a workspace by choosing a name from the i3ci workspace
-    names catalog. '''
+    names catalog. The name is chosen via the i3ci menu. '''
 
     def init_parser(self, parser):
         params.add_monitor_param(parser)
-        return self
 
     def validate_args(self, args):
         self._mon = params.get_monitor_value(args)
@@ -118,11 +68,11 @@ class create_workspace(command.Command):
 
 
 class jump_to_workspace(command.Command):
-    ''' Jump to an existing workspace. '''
+    ''' Jump to an existing workspace. The workspace is chosen via the 
+    i3ci menu. '''
 
     def init_parser(self, parser):
         params.add_monitor_param(parser)
-        return self
 
     def validate_args(self, args):
         self._mon = params.get_monitor_value(args)
@@ -136,14 +86,235 @@ class jump_to_workspace(command.Command):
                                  sb='#268bd2')
         reply = proc.communicate(input_)[0]
         if reply:
-            # Weird corner case where 00 is returned instead of 0 when
-            # there is only one workspace named 0 on the choosen output.
-            # For now just make a dirty hack :-)
-            if reply == "00":
-                reply = "0"
             a = action.Action()
             a.add(action.Action.jump_to_workspace, (reply,))
             action.default_mode(a)
             a.process()
         else:
             action.default_mode()
+
+
+class send_workspace_to_monitor(command.Command):
+    ''' Send the current workspace to the specified monitor. The monitor is
+    chosen via the i3ci menu. '''
+
+    def process(self):
+        # be sure that the workspace exists
+        cur_wks = utils.get_current_workspace()
+        if not cur_wks:
+            return
+        input_ = '\n'.join(
+            sorted(utils.get_other_outputs())).encode('utf-8')
+        size = utils.get_max_row(len(input_))
+        proc = utils.create_menu(lmax=size,
+                                 r=False,
+                                 sb='#268bd2')
+        reply = proc.communicate(input_)[0]
+        if reply:
+            reply = reply.decode('utf-8')
+            output = utils.get_outputs_dictionary()[reply]
+        a = action.Action()
+        a.add(action.Action.send_workspace_to_output, (output,))
+        action.default_mode(a)
+        a.process()
+
+
+# Windows
+# ----------------------------------------------------------------------------
+
+class jump_to_window(command.Command):
+    ''' Jump to an existing window. The window is chosen via the
+    i3ci menu.'''
+
+    def init_parser(self, parser):
+        params.add_monitor_param(parser)
+        parser.add_argument('-i', '--instance',
+                            default=None,
+                            help='X window instance name.')
+
+    def validate_args(self, args):
+        self._mon = params.get_monitor_value(args)
+        self._inst = args.instance
+        return True
+
+    def process(self):
+        windows = utils.get_windows(self._inst, self._mon)
+        win_names = sorted(windows.keys())
+        size = utils.get_max_row(len(win_names))
+        proc = utils.create_menu(lmax=size,
+                                 sb='#b58900')
+        win_name = proc.communicate('\n'.join(win_names).encode('utf-8'))[0]
+        if win_name:
+            win_name = win_name.decode('utf-8')
+            a = action.Action()
+            a.add(action.Action.jump_to_window, (windows[win_name],))
+            action.default_mode(a)
+            a.process()
+        else:
+            action.default_mode()
+
+
+class send_window_to_workspace(command.Command):
+    ''' Send the current window to an active or new workspace
+    on the specified monitor. The workspace name is chosen via the
+    i3ci menu. '''
+
+    def init_parser(self, parser):
+        params.add_monitor_param(parser)
+        params.add_new_workspace_param(parser)
+
+    def validate_args(self, args):
+        self._mon = params.get_monitor_value(args)
+        self._new = args.new
+        return True
+
+    def process(self):
+        input_ = []
+        if self._new:
+            input_ = '\n'.join(utils.get_free_workspaces())
+        else:
+            input_ = '\n'.join(utils.get_current_workspaces(self._mon))
+        size = utils.get_max_row(len(input_))
+        proc = utils.create_menu(lmax=size,
+                                 lv=not self._new,
+                                 r=True,
+                                 sb='#6c71c4')
+        reply = proc.communicate(input_)[0]
+        if reply:
+            a = action.Action()
+            a.add(action.Action.send_window_to_workspace, (reply,))
+            a.add(action.Action.jump_to_workspace, (reply,))
+            if self._mon != 'all' and self._mon != utils.get_current_output():
+                a.add(action.Action.send_workspace_to_output, (self._mon,))
+            action.default_mode(a)
+            a.process()
+        else:
+            action.default_mode()
+
+
+class send_window_to_window(command.Command):
+    ''' Send the current window next to a targeted window. The target
+    window is chosen via the i3ci menu. Note that it is not guaranteed
+    that the window will be right beside the target window, it is only
+    guaranteed that it will be on the same workspace as the target
+    window. '''
+
+    def init_parser(self, parser):
+        params.add_monitor_param(parser)
+
+    def validate_args(self, args):
+        self._mon = params.get_monitor_value(args)
+        return True
+
+    def process(self):
+        windows = utils.get_windows_on_other_workspaces(self._mon)
+        win_names = sorted(windows.keys())
+        size = utils.get_max_row(len(win_names))
+        proc = utils.create_menu(lmax=size,
+                                 sb='#b58900')
+        win_name = proc.communicate('\n'.join(win_names).encode('utf-8'))[0]
+        if win_name:
+            win_id = windows[win_name]
+            wks = utils.get_workspace_of_window(win_id)
+            a = action.Action()
+            a.add(action.Action.send_window_to_workspace, (wks,))
+            a.add(action.Action.jump_to_workspace, (wks,))
+            action.default_mode(a)
+            a.process()
+        else:
+            action.default_mode()
+
+
+class send_window_to_monitor(command.Command):
+    ''' Send the current window to the specified monitor. The monitor is
+    chosen via the i3ci menu. '''
+
+    def process(self):
+        input_ = '\n'.join(
+            sorted(utils.get_other_outputs())).encode('utf-8')
+        size = utils.get_max_row(len(input_))
+        proc = utils.create_menu(lmax=size,
+                                 r=False,
+                                 sb='#268bd2')
+        reply = proc.communicate(input_)[0]
+        if reply:
+            reply = reply.decode('utf-8')
+            output = utils.get_outputs_dictionary()[reply]
+        a = action.Action()
+        a.add(action.Action.send_window_to_output, (output,))
+        a.add(action.Action.focus_output, (output,))
+        action.default_mode(a)
+        a.process()
+
+
+class bring_window(command.Command):
+    ''' Bring the chosen window on the current workspace. The window is
+    chosen via the i3ci menu'''
+
+    def init_parser(self, parser):
+        params.add_monitor_param(parser)
+
+    def validate_args(self, args):
+        self._mon = params.get_monitor_value(args)
+        return True
+
+    def process(self):
+        windows = utils.get_windows_on_other_workspaces(self._mon)
+        win_names = sorted(windows.keys())
+        size = utils.get_max_row(len(win_names))
+        proc = utils.create_menu(lmax=size,
+                                 sb='#b58900')
+        win_name = proc.communicate('\n'.join(win_names).encode('utf-8'))[0]
+        if win_name:
+            win_id = windows[win_name]
+            wks = utils.get_current_workspace()
+            other_wks = utils.get_window_workspace(win_id)
+            a = action.Action()
+            # switch focus to the window to bring
+            a.add(action.Action.jump_to_workspace, (other_wks,))
+            a.focus_window(win_id)
+            # send the window to the original workspace
+            a.add(action.Action.send_window_to_workspace, (wks,))
+            a.add(action.Action.jump_to_workspace, (wks,))
+            # make sure the new window is focused at the end
+            a.focus_window(win_id)
+            # print action.get_command()
+            action.default_mode(a)
+            a.process()
+        else:
+            action.default_mode()
+
+
+# Others
+# ----------------------------------------------------------------------------
+
+class system(command.Command):
+    ''' Logout, suspend, reboot or shutdown. The action is chosen
+    via the i3ci menu. '''
+
+    def process(self):
+        proc = utils.create_menu(lmax=4,
+                                 nb='#002b36',
+                                 nf='#eee8dc',
+                                 sb='#cb4b16',
+                                 sf='#eee8d5')
+        input_ = '\n'.join(['logout', 'suspend', 'reboot', 'shutdown'])
+        reply = proc.communicate(input_)[0]
+        if reply:
+            a = action.Action()
+            a.add(action.Action.set_mode, ("confirm {0} ?".format(reply),))
+            a.process()
+            proc = utils.create_menu(lmax=4,
+                                     nb='#002b36',
+                                     nf='#eee8dc',
+                                     sb='#cb4b16',
+                                     sf='#eee8d5')
+            input_ = '\n'.join(['OK', 'Cancel'])
+            conf = proc.communicate(input_)[0]
+            if conf == 'OK':
+                a = action.Action()
+                action.default_mode(a)
+                a.process()
+                Popen('{0} --{1}'.format('i3ci-exit', reply), shell=True)
+                return
+        action.default_mode()

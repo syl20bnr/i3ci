@@ -34,7 +34,6 @@ class current_workspace(command.Command):
             add_description=('An empty string is returned if the specified '
                              'monitor does not contain the current '
                              'workspace'))
-        return self
 
     def validate_args(self, args):
         self._mon = params.get_monitor_value(args)
@@ -53,7 +52,6 @@ class used_workspaces(command.Command):
 
     def init_parser(self, parser):
         params.add_monitor_param(parser)
-        return self
 
     def validate_args(self, args):
         self._mon = params.get_monitor_value(args)
