@@ -13,7 +13,7 @@ __all__ = ['params', 'command', 'utils', 'action']
 
 MODULE_NAME = os.path.splitext(os.path.basename(__file__))[0]
 SCRIPT_PATH = os.path.dirname(os.path.realpath(__file__))
-I3CI_CMD_PROG_NAME = 'i3ci_cmd'
+I3CI_CMD_PROG_NAME = 'i3ci-cmd'
 I3CI_CMD_HOME_DIR = '.i3ci'
 I3CI_CMD_HOME = os.path.join(os.path.expanduser("~"), I3CI_CMD_HOME_DIR)
 
