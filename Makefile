@@ -3,22 +3,41 @@
 
 MAKEFLAGS=-s
 
-INSTALL=~/.i3
-BACKUP=$(INSTALL).bak
+I3_INSTALL=~/.i3
+I3CI_INSTALL=~/.i3ci
+BACKUP=.bak
 
-all:
+compile: i3ci_menu xcwd
+
+i3ci_menu:
 	@echo Compiling i3ci_menu...
 	cd i3ci_menu; make
 
-install: all
-	@echo Making a backup of current i3 config in $(BACKUP)...
-	rm -rf $(BACKUP)
-	mv $(INSTALL) $(BACKUP)
+xcwd:
+	@echo Compiling xcwd...
+	cd xcwd; make
+
+install: compile
+	@echo Backup of current i3 config...
+	rm -f $(I3_INSTALL)/config$(BACKUP)
+	mv $(I3_INSTALL)/config $(I3_INSTALL)/config$(BACKUP)
 	@echo Installing i3 configuration...
-	cp -r i3/ $(INSTALL)
-	mkdir -p $(INSTALL)/bin
-	cp i3ci_menu/i3ci_menu $(INSTALL)/bin
-	cp i3ci_menu/dmenu_path $(INSTALL)/bin
+	cp i3_config $(I3_INSTALL)/config
+	cp i3_i3status.conf ~/.i3status.conf
+	@echo Installing i3ci...
+	mkdir -p $(I3CI_INSTALL)/bin
+	cp i3ci_menu/i3ci_menu $(I3CI_INSTALL)/bin
+	cp i3ci_menu/dmenu_path $(I3CI_INSTALL)/bin
+	cp -r i3ci_cmd/i3ci $(I3CI_INSTALL)/bin
+	cp i3ci_cmd/i3ci_cmd $(I3CI_INSTALL)/bin
+	cp i3ci_exit/i3ci_exit $(I3CI_INSTALL)/bin
+	cp xcwd/xcwd $(I3CI_INSTALL)/bin
+	@echo Symbolic links...
+	ln -fs $(I3CI_INSTALL)/bin/i3ci_menu /usr/local/bin/i3ci_menu
+	ln -fs $(I3CI_INSTALL)/bin/i3ci_cmd /usr/local/bin/i3ci_cmd
+	ln -fs $(I3CI_INSTALL)/bin/i3ci_exit /usr/local/bin/i3ci_exit
+	ln -fs $(I3CI_INSTALL)/bin/i3ci_xcwd /usr/local/bin/i3ci_xcwd
+	ln -fs $(I3CI_INSTALL)/bin/dmenu_path /usr/local/bin/dmenu_path
 
 update: install
 	@echo Restarting i3 config...
@@ -34,3 +53,6 @@ revert:
 clean:
 	@echo Cleaning...
 	cd i3ci_menu; make clean
+	cd xcwd; make clean distclean
+
+.PHONY: i3ci_menu xcwd install update revert clean
