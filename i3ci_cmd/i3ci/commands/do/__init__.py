@@ -93,7 +93,7 @@ class focus_active_workspace(command.Command):
     ''' Focus the active workspace on the specified monitor. '''
 
     def init_parser(self, parser):
-        params.add_monitor_param(parser)
+        params.add_monitor_param(parser, mandatory=True)
 
     def validate_args(self, args):
         self._mon = params.get_monitor_value(args)
@@ -160,6 +160,25 @@ class focus_window(command.Command):
         if nth == 0:
             nth = 10
         a.add(action.Action.focus_window, (wins[nth-1],))
+        a.process()
+
+
+class send_window_to_monitor(command.Command):
+    ''' Send the current window to the specified monitor. '''
+
+    def init_parser(self, parser):
+        params.add_monitor_param(parser, mandatory=True)
+
+    def validate_args(self, args):
+        self._mon = params.get_monitor_value(args)
+        return True
+
+    def process(self):
+        output = utils.get_outputs_dictionary()[self._mon]
+        a = action.Action()
+        a.add(action.Action.send_window_to_output, (output,))
+        a.add(action.Action.focus_output, (output,))
+        action.default_mode(a)
         a.process()
 
 
