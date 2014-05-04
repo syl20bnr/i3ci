@@ -25,8 +25,7 @@ set $upmode    22
 set $help Tab
 
 # paths
-set $menup ~/.i3/scripts/menu
-set $py3statusp ~/.i3/scripts/py3status
+set $i3cibin ~/.i3ci/bin
 # force an update of the i3 status bar
 set $updatebar killall -USR1 i3status
 # wallpaper
@@ -108,19 +107,19 @@ bindsym $mod+shift+p          focus child
 bindsym $mod+Return           fullscreen
 bindsym $mod+shift+Return     floating toggle
 bindsym $mod+semicolon        exec i3-input -P "i3-msg "
-bindsym $mod+shift+w          exec $menup/toggle_wks_names
+bindsym $mod+shift+w          exec $i3ci-cmd/toggle_wks_names
 
 # explicitly call i3-msg to force the update of the tree
-bindsym $mod+0                exec $menup/focus_win -n 0
-bindsym $mod+1                exec $menup/focus_win -n 1
-bindsym $mod+2                exec $menup/focus_win -n 2
-bindsym $mod+3                exec $menup/focus_win -n 3
-bindsym $mod+4                exec $menup/focus_win -n 4
-bindsym $mod+5                exec $menup/focus_win -n 5
-bindsym $mod+6                exec $menup/focus_win -n 6
-bindsym $mod+7                exec $menup/focus_win -n 7
-bindsym $mod+8                exec $menup/focus_win -n 8
-bindsym $mod+9                exec $menup/focus_win -n 9
+bindsym $mod+0                exec $i3cibin/i3ci-cmd do focus_window 0
+bindsym $mod+1                exec $i3cibin/i3ci-cmd do focus_window 1
+bindsym $mod+2                exec $i3cibin/i3ci-cmd do focus_window 2
+bindsym $mod+3                exec $i3cibin/i3ci-cmd do focus_window 3
+bindsym $mod+4                exec $i3cibin/i3ci-cmd do focus_window 4
+bindsym $mod+5                exec $i3cibin/i3ci-cmd do focus_window 5
+bindsym $mod+6                exec $i3cibin/i3ci-cmd do focus_window 6
+bindsym $mod+7                exec $i3cibin/i3ci-cmd do focus_window 7
+bindsym $mod+8                exec $i3cibin/i3ci-cmd do focus_window 8
+bindsym $mod+9                exec $i3cibin/i3ci-cmd do focus_window 9
 
 # workspace bindings
 bindsym $mod+shift+0          workspace 0
@@ -149,18 +148,18 @@ set $mon2output xinerama-1
 
 # begin
 #   $mod+n: new | none
-#     a: application | exec $menup/i3ci_menu_run
-#       h: horizontal split | splith, exec $menup/i3ci_menu_run
-#       v: vertical split | splitv, exec $menup/i3ci_menu_run
-#       n: in new workspace | exec $menup/i3ci_menu_run --free
-#       #m: on monitor #m | exec $menup/i3ci_menu_run -m #m
-#         n: in new workspace | exec $menup/i3ci_menu_run -m #m --free 
-#     t: terminal | exec $menup/run -a $term
-#       h: horizontal split | splith, exec $menup/run -a $term
-#       v: vertical split | splitv, exec $menup/run -a $term
-#       n: n: in new workspace | exec $menup/run -a $term --free
-#       #m: on monitor #m | exec $menup/run -a $term -m #m
-#         n: in new workspace | exec $menup/run -a $term -m #m --free 
+#     a: application | exec $i3ci-cmd/i3ci_menu_run
+#       h: horizontal split | splith, exec $i3ci-cmd/i3ci_menu_run
+#       v: vertical split | splitv, exec $i3ci-cmd/i3ci_menu_run
+#       n: in new workspace | exec $i3ci-cmd/i3ci_menu_run --free
+#       #m: on monitor #m | exec $i3ci-cmd/i3ci_menu_run -m #m
+#         n: in new workspace | exec $i3ci-cmd/i3ci_menu_run -m #m --free 
+#     t: terminal | exec $i3ci-cmd/run -a $term
+#       h: horizontal split | splith, exec $i3ci-cmd/run -a $term
+#       v: vertical split | splitv, exec $i3ci-cmd/run -a $term
+#       n: n: in new workspace | exec $i3ci-cmd/run -a $term --free
+#       #m: on monitor #m | exec $i3ci-cmd/run -a $term -m #m
+#         n: in new workspace | exec $i3ci-cmd/run -a $term -m #m --free 
 #     w: workspace | none
 # end
 
@@ -172,7 +171,7 @@ mode "$new_mode" {
     bindcode $quitmode          mode $default
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $default
-    bindsym  $help              exec $menup/i3ci_menu_help -m new
+#    bindsym  $help              exec $menup/i3ci_menu_help -m new
     bindsym         a           mode $new_app_mode
     bindsym         t           mode $new_term_mode
     bindsym         w           mode $new_wks_mode
@@ -202,7 +201,7 @@ mode "$new_app_mode" {
     bindsym         h           mode $new_app_h_mode
     bindsym         v           mode $new_app_v_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/i3ci_menu_run
+    bindsym         Return      exec $i3cibin/i3ci-cmd menu start_application
 }
 
 mode "$new_app_new_mode" {
@@ -212,7 +211,7 @@ mode "$new_app_new_mode" {
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $new_app_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/i3ci_menu_run --free
+    bindsym         Return      exec $i3cibin/i3ci-cmd menu start_application --new
 }
 
 mode "$new_app_v_mode" {
@@ -222,7 +221,7 @@ mode "$new_app_v_mode" {
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $new_app_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      splitv, exec $menup/i3ci_menu_run
+    bindsym         Return      splitv, exec $i3cibin/i3ci-cmd menu start_application
 }
 
 mode "$new_app_h_mode" {
@@ -232,7 +231,7 @@ mode "$new_app_h_mode" {
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $new_app_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      splith, exec $menup/i3ci_menu_run
+    bindsym         Return      splith, exec $i3cibin/i3ci-cmd menu start_application
 }
 
 mode "$new_app_mon1_mode" {
@@ -243,7 +242,7 @@ mode "$new_app_mon1_mode" {
     bindcode $upmode            mode $new_app_mode
     bindsym         n           mode $new_app_mon1_new_mode
     # - - - - - - - - - - - - - -  key map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/i3ci_menu_run $mon1arg
+    bindsym         Return      exec $i3cibin/i3ci-cmd menu start_application $mon1arg
 }
 
 mode "$new_app_mon1_new_mode" {
@@ -253,7 +252,7 @@ mode "$new_app_mon1_new_mode" {
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $new_app_mon1_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/i3ci_menu_run $mon1arg --free
+    bindsym         Return      exec $i3cibin/i3ci-cmd menu start_application $mon1arg --new
 }
 
 mode "$new_app_mon2_mode" {
@@ -264,7 +263,7 @@ mode "$new_app_mon2_mode" {
     bindcode $upmode            mode $new_app_mode
     bindsym         n           mode $new_app_mon2_new_mode
     # - - - - - - - - - - - - - -  key map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/i3ci_menu_run $mon2arg
+    bindsym         Return      exec $i3cibin/i3ci-cmd menu start_application $mon2arg --new
 }
 
 mode "$new_app_mon2_new_mode" {
@@ -274,7 +273,7 @@ mode "$new_app_mon2_new_mode" {
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $new_app_mon2_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/i3ci_menu_run $mon2arg --free
+    bindsym         Return      exec $i3cibin/i3ci-cmd menu start_application $mon2arg --new
 }
 
 # Mode: new terminal  ----------------------------------------------------
@@ -300,7 +299,7 @@ mode "$new_term_mode" {
     bindsym         v           mode $new_term_v_mode
     bindsym         h           mode $new_term_h_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/run -a $term
+    bindsym         Return      exec $i3cibin/i3ci-cmd do start_application -a $term
 }
 
 mode "$new_term_new_mode" {
@@ -310,7 +309,7 @@ mode "$new_term_new_mode" {
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $new_term_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/run -a $term --free
+    bindsym         Return      exec $i3cibin/i3ci-cmd do start_application -a $term --new
 }
 
 mode "$new_term_h_mode" {
@@ -320,7 +319,7 @@ mode "$new_term_h_mode" {
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $new_term_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      splith, exec $menup/run -a $term
+    bindsym         Return      splith, exec $i3cibin/i3ci-cmd do start_application -a $term
 }
 
 mode "$new_term_v_mode" {
@@ -330,7 +329,7 @@ mode "$new_term_v_mode" {
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $new_term_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      splitv, exec $menup/run -a $term
+    bindsym         Return      splitv, exec $i3cibin/i3ci-cmd do start_application -a $term
 }
 
 mode "$new_term_mon1_mode" {
@@ -341,7 +340,7 @@ mode "$new_term_mon1_mode" {
     bindcode $upmode            mode $new_term_mode
     bindsym         n           mode $new_term_mon1_new_mode
     # - - - - - - - - - - - - - -  key map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/run -a $term $mon1arg
+    bindsym         Return      exec $i3cibin/i3ci-cmd do start_application -a $term $mon1arg
 }
 
 mode "$new_term_mon1_new_mode" {
@@ -351,7 +350,7 @@ mode "$new_term_mon1_new_mode" {
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $new_term_mon1_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/run -a $term $mon1arg --free
+    bindsym         Return      exec $i3cibin/i3ci-cmd do start_application -a $term $mon1arg --new
 }
 
 mode "$new_term_mon2_mode" {
@@ -362,7 +361,7 @@ mode "$new_term_mon2_mode" {
     bindcode $upmode            mode $new_term_mode
     bindsym         n           mode $new_term_mon2_new_mode
     # - - - - - - - - - - - - - -  key map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/run -a $term $mon2arg
+    bindsym         Return      exec $i3cibin/i3ci-cmd do start_application -a $term $mon2arg
 }
 
 mode "$new_term_mon2_new_mode" {
@@ -372,7 +371,7 @@ mode "$new_term_mon2_new_mode" {
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $new_term_mon2_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/run -a $term $mon2arg --free
+    bindsym         Return      exec $i3cibin/i3ci-cmd do start_application -a $term $mon2arg --new
 }
 
 # Mode: clone  -----------------------------------------------------------
@@ -398,7 +397,7 @@ mode "$clone_mode" {
     bindsym         n           mode $clone_new_mode
     bindsym         v           mode $clone_v_mode
     # - - - - - - - - - - - - - -  key map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/clone_win
+    bindsym         Return      exec $i3cibin/i3ci-cmd do clone_window
 }
 bindsym $mod+c mode $clone_mode
 
@@ -409,7 +408,7 @@ mode "$clone_new_mode" {
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $clone_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/clone_win --free
+    bindsym         Return      exec $i3cibin/i3ci-cmd do clone_window --new
 }
 
 mode "$clone_h_mode" {
@@ -419,7 +418,7 @@ mode "$clone_h_mode" {
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $clone_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      splith, exec $menup/clone_win
+    bindsym         Return      splith, exec $i3cibin/i3ci-cmd do clone_window
 }
 
 mode "$clone_v_mode" {
@@ -429,7 +428,7 @@ mode "$clone_v_mode" {
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $clone_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      splitv, exec $menup/clone_win
+    bindsym         Return      splitv, exec $i3cibin/i3ci-cmd do clone_window
 }
 
 mode "$clone_mon1_mode" {
@@ -440,7 +439,7 @@ mode "$clone_mon1_mode" {
     bindcode $upmode            mode $clone_mode
     bindsym         n           mode $clone_mon1_new_mode
     # - - - - - - - - - - - - - -  key map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/clone_win $mon1arg
+    bindsym         Return      exec $i3cibin/i3ci-cmd do clone_window $mon1arg
 }
 
 mode "$clone_mon1_new_mode" {
@@ -450,7 +449,7 @@ mode "$clone_mon1_new_mode" {
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $clone_mon1_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/clone_win $mon1arg --free
+    bindsym         Return      exec $i3cibin/i3ci-cmd do clone_window $mon1arg --new
 }
 
 mode "$clone_mon2_mode" {
@@ -461,7 +460,7 @@ mode "$clone_mon2_mode" {
     bindcode $upmode            mode $clone_mode
     bindsym         n           mode $clone_mon2_new_mode
     # - - - - - - - - - - - - - -  key map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/clone_win $mon2arg
+    bindsym         Return      exec $i3cibin/i3ci-cmd do clone_window $mon2arg
 }
 
 mode "$clone_mon2_new_mode" {
@@ -471,7 +470,7 @@ mode "$clone_mon2_new_mode" {
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $clone_mon2_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/clone_win $mon2arg --free
+    bindsym         Return      exec $i3cibin/i3ci-cmd do clone_window $mon2arg --new
 }
 
 # Mode: goto -------------------------------------------------------------
@@ -512,7 +511,7 @@ mode "$goto_mon1_mode" {
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $goto_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/focus_wks $mon1arg
+    bindsym         Return      exec $i3cibin/i3ci-cmd do focus_active_workspace $mon1arg
 }
 
 mode "$goto_mon2_mode" {
@@ -522,7 +521,7 @@ mode "$goto_mon2_mode" {
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $goto_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/focus_wks $mon2arg
+    bindsym         Return      exec $i3cibin/i3ci-cmd do focus_active_workspace $mon2arg
 }
 
 mode "$goto_app_mode" {
@@ -534,7 +533,7 @@ mode "$goto_app_mode" {
     bindsym         1           mode $goto_app_mon1_mode
     bindsym         2           mode $goto_app_mon2_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/i3ci_menu_jump_win
+    bindsym         Return      exec $i3cibin/i3ci-cmd menu jump_to_window
 }
 
 mode "$goto_app_mon1_mode" {
@@ -544,7 +543,7 @@ mode "$goto_app_mon1_mode" {
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $goto_app_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/i3ci_menu_jump_win $mon1arg
+    bindsym         Return      exec $i3cibin/i3ci-cmd menu jump_to_window $mon1arg
 }
 
 mode "$goto_app_mon2_mode" {
@@ -554,7 +553,7 @@ mode "$goto_app_mon2_mode" {
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $goto_app_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/i3ci_menu_jump_win $mon2arg
+    bindsym         Return      exec $i3cibin/i3ci-cmd menu jump_to_window $mon2arg
 }
 
 mode "$goto_term_mode" {
@@ -566,7 +565,7 @@ mode "$goto_term_mode" {
     bindsym         1           mode $goto_term_mon1_mode
     bindsym         2           mode $goto_term_mon2_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/i3ci_menu_jump_win -i $term
+    bindsym         Return      exec $i3cibin/i3ci-cmd menu jump_to_window -i $term
 }
 
 mode "$goto_term_mon1_mode" {
@@ -576,7 +575,7 @@ mode "$goto_term_mon1_mode" {
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $goto_term_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/i3ci_menu_jump_win -i $term $mon1arg
+    bindsym         Return      exec $i3cibin/i3ci-cmd menu jump_to_window -i $term $mon1arg
 }
 
 mode "$goto_term_mon2_mode" {
@@ -586,7 +585,7 @@ mode "$goto_term_mon2_mode" {
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $goto_term_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/i3ci_menu_jump_win -i $term $mon2arg
+    bindsym         Return      exec $i3cibin/i3ci-cmd menu jump_to_window -i $term $mon2arg
 }
 
 mode "$goto_wks_mode" {
@@ -599,7 +598,7 @@ mode "$goto_wks_mode" {
     bindsym         2           mode $goto_wks_mon2_mode
     bindsym         b           mode $goto_wks_back_and_forth_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/i3ci_menu_jump_cur_used_wks
+    bindsym         Return      exec $i3cibin/i3ci-cmd menu jump_to_workspace
 }
 
 mode "$goto_wks_back_and_forth_mode" {
@@ -619,7 +618,7 @@ mode "$goto_wks_mon1_mode" {
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $goto_wks_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/i3ci_menu_jump_cur_used_wks $mon1arg
+    bindsym         Return      exec $i3cibin/i3ci-cmd menu jump_to_workspace $mon1arg
 }
 
 mode "$goto_wks_mon2_mode" {
@@ -629,7 +628,7 @@ mode "$goto_wks_mon2_mode" {
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $goto_wks_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/i3ci_menu_jump_cur_used_wks $mon2arg
+    bindsym         Return      exec $i3cibin/i3ci-cmd menu jump_to_workspace $mon2arg
 }
 
 # Mode: send -------------------------------------------------------------
@@ -690,7 +689,7 @@ mode "$send_app_to_app_mode" {
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $send_app_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/i3ci_menu_send_win_to_win
+    bindsym         Return      exec $i3cibin/i3ci-cmd menu send_window_to_window
 }
 
 mode "$send_app_new_mode" {
@@ -700,7 +699,7 @@ mode "$send_app_new_mode" {
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $send_app_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/i3ci_menu_send_win_to_free_wks
+    bindsym         Return      exec $i3cibin/i3ci-cmd do send_window_to_new_workspace
 }
 
 mode "$send_app_to_wks_mode" {
@@ -710,7 +709,7 @@ mode "$send_app_to_wks_mode" {
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $send_app_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/i3ci_menu_send_win_to_used_wks
+    bindsym         Return      exec $i3cibin/i3ci-cmd menu send_window_to_workspace
 }
 
 mode "$send_app_mon1_mode" {
@@ -723,7 +722,7 @@ mode "$send_app_mon1_mode" {
     bindsym         n           mode $send_app_mon1_new_mode
     bindsym         w           mode $send_app_to_wks_mon1_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      move to output $mon1output, focus output $mon1output, mode $default
+    bindsym         Return      exec $i3cibin/i3ci-cmd do send_window_to_monitor $mon1arg
 }
 
 mode "$send_app_to_app_mon1_mode" {
@@ -733,7 +732,7 @@ mode "$send_app_to_app_mon1_mode" {
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $send_app_mon1_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/i3ci_menu_send_win_to_win $mon1arg
+    bindsym         Return      exec $i3cibin/i3ci-cmd menu send_window_to_window $mon1arg
 }
 
 mode "$send_app_mon1_new_mode" {
@@ -743,7 +742,7 @@ mode "$send_app_mon1_new_mode" {
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $send_app_mon1_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/i3ci_menu_send_win_to_free_wks $mon1arg
+    bindsym         Return      exec $i3cibin/i3ci-cmd do send_window_to_new_workspace $mon1arg
 }
 
 mode "$send_app_to_wks_mon1_mode" {
@@ -753,7 +752,7 @@ mode "$send_app_to_wks_mon1_mode" {
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $send_app_mon1_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/i3ci_menu_send_win_to_used_wks $mon1arg
+    bindsym         Return      exec $i3cibin/i3ci-cmd menu send_window_to_workspace $mon1arg
 }
 
 mode "$send_app_mon2_mode" {
@@ -766,7 +765,7 @@ mode "$send_app_mon2_mode" {
     bindsym         n           mode $send_app_mon2_new_mode
     bindsym         w           mode $send_app_to_wks_mon2_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      move to output $mon2output, focus output $mon2output, mode $default
+    bindsym         Return      exec $i3cibin/i3ci-cmd do send_window_to_monitor $mon2arg
 }
 
 mode "$send_app_to_app_mon2_mode" {
@@ -776,7 +775,7 @@ mode "$send_app_to_app_mon2_mode" {
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $send_app_mon2_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/i3ci_menu_send_win_to_win $mon2arg
+    bindsym         Return      exec $i3cibin/i3ci-cmd menu send_window_to_window $mon2arg
 }
 
 mode "$send_app_mon2_new_mode" {
@@ -786,7 +785,7 @@ mode "$send_app_mon2_new_mode" {
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $send_app_mon2_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/i3ci_menu_send_win_to_free_wks $mon2arg
+    bindsym         Return      exec $i3cibin/i3ci-cmd do send_window_to_new_workspace $mon2arg
 }
 
 mode "$send_app_to_wks_mon2_mode" {
@@ -796,7 +795,7 @@ mode "$send_app_to_wks_mon2_mode" {
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $send_app_mon2_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/i3ci_menu_send_win_to_used_wks $mon2arg
+    bindsym         Return      exec $i3cibin/i3ci-cmd menu send_window_to_workspace $mon2arg
 }
 
 mode "$send_container_mode" {
@@ -817,7 +816,7 @@ mode "$send_container_mon1_mode" {
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $send_container_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      move to output $mon1output, focus output $mon1output, mode $default
+    bindsym         Return      exec $i3cibin/i3ci-cmd do send_window_to_monitor $mon1arg
 }
 
 mode "$send_container_mon2_mode" {
@@ -827,7 +826,7 @@ mode "$send_container_mon2_mode" {
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $send_container_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      move to output $mon2output, focus output $mon2output, mode $default
+    bindsym         Return      exec $i3cibin/i3ci-cmd do send_window_to_monitor $mon2arg
 }
 
 # Mode: bring  -------------------------------------------------------------
@@ -868,7 +867,7 @@ mode "$bring_app_mode" {
     bindsym         h           mode $bring_app_h_mode
     bindsym         v           mode $bring_app_v_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/i3ci_menu_bring_win
+    bindsym         Return      exec $i3cibin/i3ci-cmd menu bring_window
 }
 
 mode "$bring_app_h_mode" {
@@ -879,7 +878,7 @@ mode "$bring_app_h_mode" {
     bindcode $upmode            mode $bring_app_mode
     bindsym         v           mode $bring_app_v_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      splith, exec $menup/i3ci_menu_bring_win
+    bindsym         Return      splith, exec $i3cibin/i3ci-cmd menu bring_window
 }
 
 mode "$bring_app_v_mode" {
@@ -890,7 +889,7 @@ mode "$bring_app_v_mode" {
     bindcode $upmode            mode $bring_app_mode
     bindsym         h           mode $bring_app_h_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      splitv, exec $menup/i3ci_menu_bring_win
+    bindsym         Return      splitv, exec $i3cibin/i3ci-cmd menu bring_window
 }
 
 mode "$bring_app_mon1_mode" {
@@ -903,7 +902,7 @@ mode "$bring_app_mon1_mode" {
     bindsym         h           mode $bring_app_mon1_h_mode
     bindsym         v           mode $bring_app_mon1_v_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/i3ci_menu_bring_win $mon1arg
+    bindsym         Return      exec $i3cibin/i3ci-cmd menu bring_window $mon1arg
 }
 
 mode "$bring_app_mon1_h_mode" {
@@ -914,7 +913,7 @@ mode "$bring_app_mon1_h_mode" {
     bindcode $upmode            mode $bring_app_mon1_mode
     bindsym         v           mode $bring_app_mon1_v_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      splith, exec $menup/i3ci_menu_bring_win $mon1arg
+    bindsym         Return      splith, exec $i3cibin/i3ci-cmd menu bring_window $mon1arg
 }
 
 mode "$bring_app_mon1_v_mode" {
@@ -925,7 +924,7 @@ mode "$bring_app_mon1_v_mode" {
     bindcode $upmode            mode $bring_app_mon1_mode
     bindsym         h           mode $bring_app_mon1_h_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      splitv, exec $menup/i3ci_menu_bring_win $mon1arg
+    bindsym         Return      splitv, exec $i3cibin/i3ci-cmd menu bring_window $mon1arg
 }
 
 mode "$bring_app_mon2_mode" {
@@ -938,7 +937,7 @@ mode "$bring_app_mon2_mode" {
     bindsym         h           mode $bring_app_mon2_h_mode
     bindsym         v           mode $bring_app_mon2_v_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      exec $menup/i3ci_menu_bring_win $mon2arg
+    bindsym         Return      exec $i3cibin/i3ci-cmd menu bring_window $mon2arg
 }
 
 mode "$bring_app_mon2_h_mode" {
@@ -949,7 +948,7 @@ mode "$bring_app_mon2_h_mode" {
     bindcode $upmode            mode $bring_app_mon2_mode
     bindsym         v           mode $bring_app_mon2_v_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      splith, exec $menup/i3ci_menu_bring_win $mon2arg
+    bindsym         Return      splith, exec $i3cibin/i3ci-cmd menu bring_window $mon2arg
 }
 
 mode "$bring_app_mon2_v_mode" {
@@ -960,7 +959,7 @@ mode "$bring_app_mon2_v_mode" {
     bindcode $upmode            mode $bring_app_mon2_mode
     bindsym         h           mode $bring_app_mon2_h_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
-    bindsym         Return      splitv, exec $menup/i3ci_menu_bring_win $mon2arg
+    bindsym         Return      splitv, exec $i3cibin/i3ci-cmd menu bring_window $mon2arg
 }
 
 # Mode: functions --------------------------------------------------------
@@ -981,7 +980,7 @@ mode "$func_mode" {
     bindcode $quitmode2         mode $default
     bindcode $upmode            mode $default
     bindsym         d           mode $func_display_mode
-    bindsym         e           mode $func_exit_mode, exec $menup/i3ci_menu_logout
+    bindsym         e           mode $func_exit_mode, exec $i3ci-cmd/i3ci_menu_logout
     bindsym         l           mode $func_layout_mode
     bindsym   shift+l           exec i3lock, mode $default
     bindsym         r           mode $func_resize_mode
