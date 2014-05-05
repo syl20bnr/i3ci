@@ -1,9 +1,11 @@
 *.pyc
 *.o
 *.tmp
-i3ci_menu/core
+*core*
 i3ci_menu/i3ci_menu
 i3ci_menu/dmenu_path
 i3ci_menu/stest
+xcwd/xcwd
+
 
 
