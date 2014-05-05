@@ -1,4 +1,4 @@
-from subprocess import Popen
+import i3
 
 
 class Action(object):
@@ -16,10 +16,10 @@ class Action(object):
         return self
 
     def get_command(self):
-        return 'i3-msg ' + ','.join(self._actions)
+        return ','.join(self._actions)
 
     def process(self):
-        Popen(self.get_command(), shell=True)
+        i3.msg('command', ','.join(self._actions))
 
     def exec_(self, app):
         return 'exec {0}'.format(app)
