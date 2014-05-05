@@ -2,6 +2,8 @@
  Commands requiring the i3ci menu. To get the list of possible
 action type "i3ci_cmd menu -h"
  '''
+from subprocess import Popen
+
 from i3ci import *
 from i3ci.commands import do
 
