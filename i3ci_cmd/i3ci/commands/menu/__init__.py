@@ -315,6 +315,6 @@ class system(command.Command):
                 a = action.Action()
                 action.default_mode(a)
                 a.process()
-                Popen('{0} --{1}'.format('i3ci-exit', reply), shell=True)
+                Popen('{0} --{1}'.format('i3ci_exit', reply), shell=True)
                 return
         action.default_mode()
