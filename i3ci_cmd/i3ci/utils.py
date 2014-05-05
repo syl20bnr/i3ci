@@ -1,9 +1,11 @@
 import string
 import re
+import thread
 from subprocess import Popen, PIPE
 
-import i3
 from Xlib import display
+
+import i3
 
 
 # Outputs
@@ -138,6 +140,19 @@ def get_current_window_id():
     if window:
         return window[0]['id']
     return ''
+
+
+def set_window_mark_callback(event, data, subscription):
+    ''' Callback to automatically set a mark on a created window. '''
+    obj = 'container'
+    con_id = None
+    name = None
+    if event.setdefault(obj, None):
+        con_id = event[obj].setdefault('id', None)
+        name = event[obj].setdefault('name', None)
+    if con_id and name:
+        i3.msg('command', '[con_id={0}] mark "{1}"'.format(con_id, name))
+    thread.interrupt_main()
 
 
 def get_windows(win_inst=None, mon='all'):

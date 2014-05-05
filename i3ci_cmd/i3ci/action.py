@@ -74,9 +74,12 @@ class Action(object):
         ''' Focus the specified output. '''
         return "[con_id={0}] focus".format(id_)
 
-    def mark_window(self, id_, mark):
+    def mark_window(self, mark, id_=None):
         ''' Set the passed mark to the window with the passed id_.  '''
-        return '[con_id={0}] mark {1}'.format(id_, mark)
+        if id_:
+            return '[con_id={0}] mark "{1}"'.format(id_, mark)
+        else:
+            return 'mark "{0}"'.format(mark)
 
     def unmark_window(self, mark):
         ''' Disable the passed mark.  '''

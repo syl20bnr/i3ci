@@ -53,6 +53,7 @@ class start_application(command.Command):
             a.add(action.Action.exec_, (app,))
             action.default_mode(a)
             a.process()
+            i3.subscribe('window', 'new', utils.set_window_mark_callback)
         if not in_new_wks and (
                 mon != 'all' and
                 mon != utils.get_current_output()):
@@ -63,6 +64,7 @@ class start_application(command.Command):
             a.add(action.Action.exec_, (app,))
             action.default_mode(a)
             a.process()
+            i3.subscribe('window', 'new', utils.set_window_mark_callback)
         elif in_new_wks and (
                 mon == 'all' or
                 mon == utils.get_current_output()):
@@ -73,6 +75,7 @@ class start_application(command.Command):
             a.add(action.Action.exec_, (app,))
             action.default_mode(a)
             a.process()
+            i3.subscribe('window', 'new', utils.set_window_mark_callback)
         elif in_new_wks and (
                 mon != 'all' and
                 mon != utils.get_current_output()):
@@ -84,6 +87,7 @@ class start_application(command.Command):
             a.add(action.Action.exec_, (app,))
             action.default_mode(a)
             a.process()
+            i3.subscribe('window', 'new', utils.set_window_mark_callback)
 
 
 # Workspaces
