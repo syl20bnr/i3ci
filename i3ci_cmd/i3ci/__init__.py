@@ -2,11 +2,12 @@ import sys
 import os
 import argparse
 
+import i3
 import params
 import command
 import utils
 import action
-__all__ = ['params', 'command', 'utils', 'action']
+__all__ = ['i3', 'params', 'command', 'utils', 'action']
 
 # Constants
 # ----------------------------------------------------------------------------
