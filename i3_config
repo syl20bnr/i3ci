@@ -30,7 +30,7 @@ set $i3cibin ~/.i3ci/bin
 set $updatebar killall -USR1 i3status
 # wallpaper
 set $wallpaper feh --bg-fill ~/.img/green_mountains_in_the_morning-wallpaper-1280x800.jpg
-#set $wallpaper feh --bg-fill ~/.img/mountain_range-1920x1080.jpg
+#set $wallpaper feh --bg-fill ~/.img/space_shuttle_discovery-wide.jpg
 
 # ========================================================================
 #                             System Preferences
@@ -1062,7 +1062,8 @@ mode "$func_display_work_mode" {
     bindcode $upmode            mode $func_display_mode
     # - - - - - - - - - - - - - -  Key Map - - - - - - - - - - - - - - - -
     bindsym         c           exec xrandr --output DVI-I-2 --auto --same-as DVI-I-3
-    bindsym         d           exec xrandr --output DVI-I-2 --auto --left-of DVI-I-3
+    bindsym         l           exec xrandr --output DVI-I-2 --auto --left-of DVI-I-3
+    bindsym         r           exec xrandr --output DVI-I-2 --auto --right-of DVI-I-3
 }
 
 # Mode: logout -----------------------------------------------------------
