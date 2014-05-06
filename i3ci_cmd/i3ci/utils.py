@@ -147,9 +147,23 @@ def set_window_mark_callback(event, data, subscription):
     obj = 'container'
     con_id = None
     name = None
+    window = None
     if event.setdefault(obj, None):
         con_id = event[obj].setdefault('id', None)
         name = event[obj].setdefault('name', None)
+        window = event[obj].setdefault('window', None)
+    if window:
+        dpy = display.Display()
+        xwin = dpy.create_resource_object('window', window)
+        name, _ = xwin.get_wm_class()
+    cnames = i3.msg('get_marks')
+    if name in cnames:
+        i = 1
+        bname = name
+        name = '{0}-{1}'.format(bname, i)
+        while name in cnames:
+            i += 1
+            name = '{0}-{1}'.format(bname, i)
     if con_id and name:
         i3.msg('command', '[con_id={0}] mark "{1}"'.format(con_id, name))
     thread.interrupt_main()

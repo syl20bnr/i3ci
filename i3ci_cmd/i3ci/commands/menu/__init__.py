@@ -156,6 +156,26 @@ class jump_to_window(command.Command):
             action.default_mode()
 
 
+class jump_to_window2(command.Command):
+    ''' Jump to an existing window using auto marks. The window is chosen
+    via the i3ci menu.'''
+
+    def process(self):
+        marks = i3.msg('get_marks')
+        size = utils.get_max_row(len(marks))
+        proc = utils.create_menu(lmax=size,
+                                 sb='#b58900')
+        mark = proc.communicate('\n'.join(marks).encode('utf-8'))[0]
+        if mark:
+            mark = mark.decode('utf-8')
+            a = action.Action()
+            a.add(action.Action.jump_to_mark, (mark,))
+            action.default_mode(a)
+            a.process()
+        else:
+            action.default_mode()
+
+
 class send_window_to_workspace(command.Command):
     ''' Send the current window to an active or new workspace
     on the specified monitor. The workspace name is chosen via the

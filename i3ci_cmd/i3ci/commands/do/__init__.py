@@ -52,8 +52,9 @@ class start_application(command.Command):
             a = action.Action()
             a.add(action.Action.exec_, (app,))
             action.default_mode(a)
-            a.process()
-            i3.subscribe('window', 'new', utils.set_window_mark_callback)
+            i3.subscribe('window', 'new',
+                         utils.set_window_mark_callback,
+                         lambda: a.process())
         if not in_new_wks and (
                 mon != 'all' and
                 mon != utils.get_current_output()):
@@ -63,8 +64,9 @@ class start_application(command.Command):
             a.add(action.Action.jump_to_workspace, (otherw,))
             a.add(action.Action.exec_, (app,))
             action.default_mode(a)
-            a.process()
-            i3.subscribe('window', 'new', utils.set_window_mark_callback)
+            i3.subscribe('window', 'new',
+                         utils.set_window_mark_callback,
+                         lambda: a.process())
         elif in_new_wks and (
                 mon == 'all' or
                 mon == utils.get_current_output()):
@@ -74,8 +76,9 @@ class start_application(command.Command):
             a.add(action.Action.jump_to_workspace, (neww,))
             a.add(action.Action.exec_, (app,))
             action.default_mode(a)
-            a.process()
-            i3.subscribe('window', 'new', utils.set_window_mark_callback)
+            i3.subscribe('window', 'new',
+                         utils.set_window_mark_callback,
+                         lambda: a.process())
         elif in_new_wks and (
                 mon != 'all' and
                 mon != utils.get_current_output()):
@@ -86,8 +89,9 @@ class start_application(command.Command):
             a.add(action.Action.jump_to_workspace, (neww,))
             a.add(action.Action.exec_, (app,))
             action.default_mode(a)
-            a.process()
-            i3.subscribe('window', 'new', utils.set_window_mark_callback)
+            i3.subscribe('window', 'new',
+                         utils.set_window_mark_callback,
+                         lambda: a.process())
 
 
 # Workspaces

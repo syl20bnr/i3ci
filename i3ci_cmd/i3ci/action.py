@@ -49,6 +49,10 @@ class Action(object):
         else:
             return "workspace {0}".format(workspace)
 
+    def jump_to_mark(self, mark):
+        ''' Jump to the given mark. '''
+        return "[con_mark=\"{0}\"] focus".format(mark)
+
     def send_window_to_output(self, output):
         ''' Send the current window to the specified output. '''
         return "move to output {0}".format(output)

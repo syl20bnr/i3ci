@@ -422,11 +422,13 @@ def __function__(type, message='', *args, **crit):
     return function
 
 
-def subscribe(event_type, event=None, callback=None):
+def subscribe(event_type, event=None, callback=None, action=None):
     """
     Accepts an event_type and event itself.
-    Creates a new subscription, prints data on every event until
-    KeyboardInterrupt is raised.
+    Creates a new subscription, prints data and execute callback
+    on every event until KeyboardInterrupt is raised.
+    The action callback allow to perform some stuff before entering
+    the blocking loop.
     """
     if not callback:
         def callback(event, data, subscription):
@@ -436,6 +438,7 @@ def subscribe(event_type, event=None, callback=None):
     
     socket = default_socket()
     subscription = Subscription(callback, event_type, event, data_socket=socket)
+    action()
     try:
         while True:
             time.sleep(1)
