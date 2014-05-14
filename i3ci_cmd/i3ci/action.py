@@ -26,7 +26,7 @@ class Action(object):
 
     def set_mode(self, mode):
         ''' Set the specified mode '''
-        return 'mode {0}'.format(mode)
+        return 'mode "{0}"'.format(mode)
 
     def set_default_mode(self):
         ''' Set the default mode '''
