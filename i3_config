@@ -101,6 +101,8 @@ bindsym $mod+shift+$left      move left
 bindsym $mod+shift+$down      move down
 bindsym $mod+shift+$up        move up
 bindsym $mod+shift+$right     move right
+bindsym $mod+Tab              workspace next_on_output
+bindsym $mod+shift+Tab        workspace prev_on_output
 bindsym $mod+shift+q          kill
 bindsym $mod+p                focus parent
 bindsym $mod+shift+p          focus child

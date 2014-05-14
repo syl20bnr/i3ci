@@ -8,16 +8,6 @@ I3CI_INSTALL=~/.i3ci
 BACKUP=.bak
 
 compile: i3ci_menu xcwd
-
-i3ci_menu:
-	@echo Compiling i3ci_menu...
-	cd i3ci_menu; make
-
-xcwd:
-	@echo Compiling xcwd...
-	cd xcwd; make
-
-install: compile
 	@echo Backup of current i3 config...
 	rm -f $(I3_INSTALL)/config$(BACKUP)
 	mv $(I3_INSTALL)/config $(I3_INSTALL)/config$(BACKUP)
@@ -32,6 +22,16 @@ install: compile
 	cp i3ci_cmd/i3ci_cmd $(I3CI_INSTALL)/bin
 	cp i3ci_exit/i3ci_exit $(I3CI_INSTALL)/bin
 	cp xcwd/xcwd $(I3CI_INSTALL)/bin
+
+i3ci_menu:
+	@echo Compiling i3ci_menu...
+	cd i3ci_menu; make
+
+xcwd:
+	@echo Compiling xcwd...
+	cd xcwd; make
+
+install:
 	@echo Symbolic links...
 	ln -fs $(I3CI_INSTALL)/bin/i3ci_menu /usr/local/bin/i3ci_menu
 	ln -fs $(I3CI_INSTALL)/bin/i3ci_cmd /usr/local/bin/i3ci_cmd
